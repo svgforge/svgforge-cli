@@ -1,0 +1,138 @@
+{
+  "name": "@joeda1/svg-sprite-cli",
+  "version": "1.0.0",
+  "description": "Command line interface for svg-sprite — create SVG sprites & stacks with stylesheet resources (CSS, Sass, LESS, Stylus, etc.)",
+  "homepage": "https://github.com/joeda1/svg-sprite-cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joeda1/svg-sprite-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joeda1/svg-sprite-cli/issues"
+  },
+  "license": "MIT",
+  "author": "Felix Müller",
+  "contributors": [
+    "Joschi Kuphal <joschi@kuphal.net> (https://github.com/jkphl)"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "svg-sprite": "./bin/svg-sprite.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "scripts": {
+    "lint": "xo",
+    "fix": "xo --fix",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "glob": "^13.0.6",
+    "js-yaml": "^5.4.1",
+    "lodash.merge": "^4.6.2",
+    "svg-sprite": "3.0.0-rc3",
+    "vinyl": "^3.0.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "eslint-plugin-jsdoc": "^64.3.1",
+    "xo": "^0.60.0"
+  },
+  "keywords": [
+    "svg",
+    "sprite",
+    "spritesheet",
+    "stack",
+    "generator",
+    "css",
+    "cli",
+    "command-line"
+  ],
+  "xo": {
+    "space": true,
+    "plugins": [
+      "jsdoc"
+    ],
+    "extends": [
+      "plugin:jsdoc/recommended"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "test/**/*.test.js",
+          "test/helpers.js"
+        ],
+        "rules": {
+          "n/no-unsupported-features/node-builtins": "off"
+        }
+      }
+    ],
+    "rules": {
+      "arrow-body-style": "off",
+      "capitalized-comments": "off",
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
+      "eslint-comments/disable-enable-pair": "off",
+      "jsdoc/check-values": [
+        "error",
+        {
+          "allowedLicenses": [
+            "MIT https://github.com/joeda1/svg-sprite-cli/blob/main/LICENSE"
+          ]
+        }
+      ],
+      "jsdoc/no-undefined-types": [
+        "error",
+        {
+          "definedTypes": [
+            "SVGSpriter",
+            "File",
+            "SVGShape",
+            "SVGSprite",
+            "playwright",
+            "HTMLElement"
+          ]
+        }
+      ],
+      "jsdoc/require-returns": "error",
+      "jsdoc/tag-lines": "off",
+      "logical-assignment-operators": "off",
+      "max-depth": [
+        "warn",
+        5
+      ],
+      "max-params": "off",
+      "no-bitwise": "off",
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "operator-linebreak": [
+        "error",
+        "after"
+      ],
+      "prefer-template": "error",
+      "space-before-function-paren": [
+        "error",
+        "never"
+      ],
+      "spaced-comment": "off",
+      "unicorn/explicit-length-check": "off",
+      "unicorn/no-anonymous-default-export": "off",
+      "unicorn/no-array-method-this-argument": "off",
+      "unicorn/no-array-reduce": "off",
+      "unicorn/no-negated-condition": "off",
+      "unicorn/prefer-code-point": "off",
+      "unicorn/prefer-event-target": "off",
+      "unicorn/prefer-module": "off",
+      "unicorn/prefer-reflect-apply": "off",
+      "unicorn/prefer-string-slice": "off",
+      "unicorn/prevent-abbreviations": "off"
+    }
+  }
+}
