@@ -21,7 +21,6 @@ import {fileURLToPath} from 'node:url';
 import merge from 'lodash.merge';
 import File from 'vinyl';
 import {load} from 'js-yaml';
-import {globSync} from 'glob';
 import yargs from 'yargs';
 import SVGSpriter from 'svgforge';
 import {isObject, zipObject} from 'svgforge/lib/svg-sprite/utils/index.js';
@@ -499,7 +498,7 @@ async function main() {
   loadVariables(config);
 
   const spriter = new SVGSpriter(config);
-  const files = argv._.flatMap(filePattern => globSync(filePattern));
+  const files = argv._.flatMap(filePattern => fs.globSync(filePattern).toSorted((a, b) => b.localeCompare(a)));
 
   for (const filePattern of files) {
     // Glob >= 9 returns paths without the "./" prefix, so detect relative

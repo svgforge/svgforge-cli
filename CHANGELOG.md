@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `pnpm-workspace.yaml` override (`svgforge: link:../svgforge`) so the
   committed `package.json` stays publication-safe (`svgforge: 1.0.0`)
 * Add `/pnpm-workspace.yaml` to `.gitignore` and regenerate the lockfile
+* Replace the `glob` package with the native `fs.globSync` API and drop `glob`
+  from the dependencies; `engines.node` stays `>= 22` (required for the glob
+  API introduced in Node 22)
 
 ## 1.0.0-alpha — 2024-?
 

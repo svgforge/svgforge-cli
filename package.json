@@ -41,7 +41,6 @@
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "glob": "^13.0.6",
     "js-yaml": "^5.4.1",
     "lodash.merge": "^4.6.2",
     "svgforge": "1.0.0",
