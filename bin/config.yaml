@@ -189,7 +189,7 @@ css:
       alias: ccss
 
       template:
-        description: CSS stylesheet Mustache template (relative to svg-sprite basedir)
+        description: CSS stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/css/sprite.css
         map: mode.css.render.css.template
 
@@ -204,7 +204,7 @@ css:
       alias: cscss
 
       template:
-        description: Sass stylesheet Mustache template (relative to svg-sprite basedir)
+        description: Sass stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/css/sprite.scss
         map: mode.css.render.scss.template
 
@@ -213,40 +213,10 @@ css:
         default: sprite.scss
         map: mode.css.render.scss.dest
 
-    less:
-      description: Whether to render a LESS stylesheet
-      default: false
-      alias: cless
-
-      template:
-        description: LESS stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/css/sprite.less
-        map: mode.css.render.less.template
-
-      dest:
-        description: LESS stylesheet destination (relative to the --css-dest)
-        default: sprite.less
-        map: mode.css.render.less.dest
-
-    styl:
-      description: Whether to render a Stylus stylesheet
-      default: false
-      alias: cstyl
-
-      template:
-        description: Stylus stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/css/sprite.styl
-        map: mode.css.render.styl.template
-
-      dest:
-        description: styl stylesheet destination (relative to the --css-dest)
-        default: sprite.styl
-        map: mode.css.render.styl.dest
-
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svg-sprite basedir)
+        description: Custom output Mustache template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --css-dest)
@@ -257,7 +227,7 @@ css:
     alias: cx
 
     template:
-      description: HTML document Mustache template (relative to svg-sprite basedir)
+      description: HTML document Mustache template (relative to svgforge basedir)
       default: tmpl/css/sprite.html
       map: mode.css.example.template
 
@@ -320,7 +290,7 @@ view:
       alias: vcss
 
       template:
-        description: CSS stylesheet Mustache template (relative to svg-sprite basedir)
+        description: CSS stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/css/sprite.css
         map: mode.view.render.css.template
 
@@ -335,7 +305,7 @@ view:
       alias: vscss
 
       template:
-        description: Sass stylesheet Mustache template (relative to svg-sprite basedir)
+        description: Sass stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/css/sprite.scss
         map: mode.view.render.scss.template
 
@@ -344,40 +314,10 @@ view:
         default: sprite.scss
         map: mode.view.render.scss.dest
 
-    less:
-      description: Whether to render a LESS stylesheet
-      default: false
-      alias: vless
-
-      template:
-        description: LESS stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/css/sprite.less
-        map: mode.view.render.less.template
-
-      dest:
-        description: LESS stylesheet destination (relative to the --view-dest)
-        default: sprite.less
-        map: mode.view.render.less.dest
-
-    styl:
-      description: Whether to render a Stylus stylesheet
-      default: false
-      alias: vstyl
-
-      template:
-        description: Stylus stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/css/sprite.styl
-        map: mode.view.render.styl.template
-
-      dest:
-        description: styl stylesheet destination (relative to the --view-dest)
-        default: sprite.styl
-        map: mode.view.render.styl.dest
-
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svg-sprite basedir)
+        description: Custom output Mustache template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --view-dest)
@@ -388,7 +328,7 @@ view:
     alias: vx
 
     template:
-      description: HTML document Mustache template (relative to svg-sprite basedir)
+      description: HTML document Mustache template (relative to svgforge basedir)
       default: tmpl/view/sprite.html
       map: mode.view.example.template
 
@@ -435,7 +375,7 @@ defs:
       alias: dcss
 
       template:
-        description: CSS stylesheet Mustache template (relative to svg-sprite basedir)
+        description: CSS stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/common/sprite.css
         map: mode.defs.render.css.template
 
@@ -450,7 +390,7 @@ defs:
       alias: dscss
 
       template:
-        description: Sass stylesheet Mustache template (relative to svg-sprite basedir)
+        description: Sass stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/common/sprite.scss
         map: mode.defs.render.scss.template
 
@@ -459,40 +399,10 @@ defs:
         default: sprite.scss
         map: mode.defs.render.scss.dest
 
-    less:
-      description: Whether to render a LESS stylesheet
-      default: false
-      alias: dless
-
-      template:
-        description: LESS stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/common/sprite.less
-        map: mode.defs.render.less.template
-
-      dest:
-        description: LESS stylesheet destination (relative to the --defs-dest)
-        default: sprite.less
-        map: mode.defs.render.less.dest
-
-    styl:
-      description: Whether to render a Stylus stylesheet
-      default: false
-      alias: dstyl
-
-      template:
-        description: Stylus stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/common/sprite.styl
-        map: mode.defs.render.styl.template
-
-      dest:
-        description: styl stylesheet destination (relative to the --defs-dest)
-        default: sprite.styl
-        map: mode.defs.render.styl.dest
-
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svg-sprite basedir)
+        description: Custom output Mustache template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --defs-dest)
@@ -509,7 +419,7 @@ defs:
     alias: dx
 
     template:
-      description: HTML document Mustache template (relative to svg-sprite basedir)
+      description: HTML document Mustache template (relative to svgforge basedir)
       default: tmpl/defs/sprite.html
       map: mode.defs.example.template
 
@@ -556,7 +466,7 @@ symbol:
       alias: scss
 
       template:
-        description: CSS stylesheet Mustache template (relative to svg-sprite basedir)
+        description: CSS stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/common/sprite.css
         map: mode.symbol.render.css.template
 
@@ -571,7 +481,7 @@ symbol:
       alias: sscss
 
       template:
-        description: Sass stylesheet Mustache template (relative to svg-sprite basedir)
+        description: Sass stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/common/sprite.scss
         map: mode.symbol.render.scss.template
 
@@ -580,40 +490,10 @@ symbol:
         default: sprite.scss
         map: mode.symbol.render.scss.dest
 
-    less:
-      description: Whether to render a LESS stylesheet
-      default: false
-      alias: sless
-
-      template:
-        description: LESS stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/common/sprite.less
-        map: mode.symbol.render.less.template
-
-      dest:
-        description: LESS stylesheet destination (relative to the --symbol-dest)
-        default: sprite.less
-        map: mode.symbol.render.less.dest
-
-    styl:
-      description: Whether to render a Stylus stylesheet
-      default: false
-      alias: sstyl
-
-      template:
-        description: Stylus stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/common/sprite.styl
-        map: mode.symbol.render.styl.template
-
-      dest:
-        description: styl stylesheet destination (relative to the --symbol-dest)
-        default: sprite.styl
-        map: mode.symbol.render.styl.dest
-
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svg-sprite basedir)
+        description: Custom output Mustache template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --symbol-dest)
@@ -630,7 +510,7 @@ symbol:
     alias: sx
 
     template:
-      description: HTML document Mustache template (relative to svg-sprite basedir)
+      description: HTML document Mustache template (relative to svgforge basedir)
       default: tmpl/symbol/sprite.html
       map: mode.symbol.example.template
 
@@ -682,7 +562,7 @@ stack:
       alias: Scss
 
       template:
-        description: CSS stylesheet Mustache template (relative to svg-sprite basedir)
+        description: CSS stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/common/sprite.css
         map: mode.stack.render.css.template
 
@@ -697,7 +577,7 @@ stack:
       alias: Sscss
 
       template:
-        description: Sass stylesheet Mustache template (relative to svg-sprite basedir)
+        description: Sass stylesheet Mustache template (relative to svgforge basedir)
         default: tmpl/common/sprite.scss
         map: mode.stack.render.scss.template
 
@@ -706,40 +586,10 @@ stack:
         default: sprite.scss
         map: mode.stack.render.scss.dest
 
-    less:
-      description: Whether to render a LESS stylesheet
-      default: false
-      alias: Sless
-
-      template:
-        description: LESS stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/common/sprite.less
-        map: mode.stack.render.less.template
-
-      dest:
-        description: LESS stylesheet destination (relative to the --stack-dest)
-        default: sprite.less
-        map: mode.stack.render.less.dest
-
-    styl:
-      description: Whether to render a Stylus stylesheet
-      default: false
-      alias: Sstyl
-
-      template:
-        description: Stylus stylesheet Mustache template (relative to svg-sprite basedir)
-        default: tmpl/common/sprite.styl
-        map: mode.stack.render.styl.template
-
-      dest:
-        description: styl stylesheet destination (relative to the --stack-dest)
-        default: sprite.styl
-        map: mode.stack.render.styl.dest
-
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svg-sprite basedir)
+        description: Custom output Mustache template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --stack-dest)
@@ -750,7 +600,7 @@ stack:
     alias: Sx
 
     template:
-      description: HTML document Mustache template (relative to svg-sprite basedir)
+      description: HTML document Mustache template (relative to svgforge basedir)
       default: tmpl/stack/sprite.html
       map: mode.stack.example.template
 

@@ -1,97 +1,87 @@
-'use strict';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {describe, it} from 'node:test';
+import {execCli, makeTemporaryDir} from './helpers.js';
 
-/**
- * Integration tests for the svg-sprite-cli
- *
- * @see https://github.com/joeda1/svg-sprite-cli
- * @author Joschi Kuphal <joschi@kuphal.net> (https://github.com/jkphl)
- * @author Felix Müller
- * @copyright © 2018 Joschi Kuphal
- * @copyright © 2026 Felix Müller
- * @license MIT https://github.com/joeda1/svg-sprite-cli/blob/main/LICENSE
- */
-
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const { describe, it } = require('node:test');
-const { execCli, makeTempDir } = require('./helpers.js');
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixtureDir = path.join(__dirname, 'fixtures');
 const svgFiles = ['one.svg', 'two.svg'].map(file => path.join(fixtureDir, file));
 
 /**
- * Run an assertion callback inside a fresh temporary directory
- *
- * @param {() => Promise<void>} callback Assertion callback receiving the directory
- * @returns {Promise<void>} Promise resolving after the callback finished
+ Run an assertion callback inside a fresh temporary directory
+
+ @param {() => Promise<void>} callback Assertion callback receiving the directory
+ @returns {Promise<void>} Promise resolving after the callback finished
  */
-async function withTempDir(callback) {
-  const dir = makeTempDir();
+async function withTemporaryDir(callback) {
+  const dir = makeTemporaryDir();
 
   try {
     await callback(dir);
   } finally {
-    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(dir, {recursive: true, force: true});
   }
 }
 
 /**
- * Check that a file exists and return its contents
- *
- * @param {string} filePath Absolute path to the file
- * @returns {string} File contents
+ Check that a file exists and return its contents
+
+ @param {string} filePath Absolute path to the file
+ @returns {string} File contents
  */
 function readFile(filePath) {
   assert.equal(fs.existsSync(filePath), true, `Missing file: ${filePath}`);
   return fs.readFileSync(filePath, 'utf8');
 }
 
-describe('svg-sprite-cli', () => {
+describe('svgforge-cli', () => {
   describe('basic usage', () => {
-    it('prints the version', async() => {
-      const { stdout } = await execCli(['--version']);
-      assert.match(stdout, /\d+\.\d+\.\d+/);
+    it('prints the version', async () => {
+      const {stdout} = await execCli(['--version']);
+      // eslint-disable-next-line regexp/no-super-linear-move -- Version output is a bounded, non-attacker-controlled fixture pattern.
+      assert.match(stdout, /\d+\.\d+\.\d+/u);
     });
 
-    it('prints usage information for --help', async() => {
-      const { stdout } = await execCli(['--help']);
-      assert.match(stdout, /^Usage:/m);
-      assert.match(stdout, /--css/);
+    it('prints usage information for --help', async () => {
+      const {stdout} = await execCli(['--help']);
+      assert.match(stdout, /^Usage:/mu);
+      assert.match(stdout, /--css/u);
     });
 
-    it('fails when no files are provided', async() => {
-      await assert.rejects(execCli([]));
+    it('fails when no files are provided', async () => {
+      await assert.rejects(execCli([]), /error/iu);
     });
   });
 
   describe('sprite generation', () => {
-    it('creates a CSS sprite with a stylesheet', async() => {
-      await withTempDir(async dir => {
+    it('creates a CSS sprite with a stylesheet', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--css',
           '--css-render-css',
           '--css-bust=false',
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-one\s*{/);
-        assert.match(css, /\.svg-two\s*{/);
-        assert.match(css, /url\("svg\/sprite\.css\.svg"\)/);
+        assert.match(css, /\.svg-one\s*\{/u);
+        assert.match(css, /\.svg-two\s*\{/u);
+        assert.match(css, /url\("svg\/sprite\.css\.svg"\)/u);
 
         const sprite = readFile(path.join(dest, 'css', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /^<\?xml/);
-        assert.match(sprite, /<svg/);
-        assert.match(sprite, /id="one"/);
-        assert.match(sprite, /id="two"/);
+        assert.match(sprite, /^<\?xml/u);
+        assert.match(sprite, /<svg/u);
+        assert.match(sprite, /id="one"/u);
+        assert.match(sprite, /id="two"/u);
       });
     });
 
-    it('renders a stylesheet example document on request', async() => {
-      await withTempDir(async dir => {
+    it('renders a stylesheet example document on request', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--css',
@@ -99,63 +89,63 @@ describe('svg-sprite-cli', () => {
           '--css-example',
           '--css-bust=false',
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const example = readFile(path.join(dest, 'css', 'sprite.css.html'));
-        assert.match(example, /<html/i);
-        assert.match(example, /sprite.css.svg/);
+        assert.match(example, /<html/iu);
+        assert.match(example, /sprite.css.svg/u);
       });
     });
 
-    it('creates a symbol sprite', async() => {
-      await withTempDir(async dir => {
+    it('creates a symbol sprite', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /<symbol viewBox="0 0 24 24" id="one"/);
-        assert.match(sprite, /<symbol viewBox="0 0 24 24" id="two"/);
+        assert.match(sprite, /<symbol viewBox="0 0 24 24" id="one"/u);
+        assert.match(sprite, /<symbol viewBox="0 0 24 24" id="two"/u);
       });
     });
 
-    it('creates a defs sprite', async() => {
-      await withTempDir(async dir => {
+    it('creates a defs sprite', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--defs', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /<defs>/);
-        assert.match(sprite, /id="one"/);
-        assert.match(sprite, /id="two"/);
+        assert.match(sprite, /<defs>/u);
+        assert.match(sprite, /id="one"/u);
+        assert.match(sprite, /id="two"/u);
       });
     });
 
-    it('creates a stack sprite', async() => {
-      await withTempDir(async dir => {
+    it('creates a stack sprite', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--stack', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'stack', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /:root>svg:target/);
-        assert.match(sprite, /id="one"/);
-        assert.match(sprite, /id="two"/);
+        assert.match(sprite, /:root>svg:target/u);
+        assert.match(sprite, /id="one"/u);
+        assert.match(sprite, /id="two"/u);
       });
     });
 
-    it('creates a view sprite', async() => {
-      await withTempDir(async dir => {
+    it('creates a view sprite', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--view', '--view-bust=false', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'view', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /<view id="one" viewBox="0 0 24 24"/);
-        assert.match(sprite, /<view id="two"/);
+        assert.match(sprite, /<view id="one" viewBox="0 0 24 24"/u);
+        assert.match(sprite, /<view id="two"/u);
       });
     });
 
-    it('generates multiple sprite modes in one run', async() => {
-      await withTempDir(async dir => {
+    it('generates multiple sprite modes in one run', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--symbol', '--css-bust=false', `--dest=${dest}`, ...svgFiles]);
 
@@ -166,285 +156,285 @@ describe('svg-sprite-cli', () => {
   });
 
   describe('configuration', () => {
-    it('loads an external JSON config file', async() => {
-      await withTempDir(async dir => {
+    it('loads an external JSON config file', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--config',
           path.join(fixtureDir, 'config.json'),
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const css = readFile(path.join(dest, 'symbol', 'sprite.css'));
-        assert.match(css, /\.svg-one/);
+        assert.match(css, /\.svg-one/u);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /<symbol/);
+        assert.match(sprite, /<symbol/u);
       });
     });
 
-    it('applies custom SVG root attributes from a JSON file', async() => {
-      await withTempDir(async dir => {
+    it('applies custom SVG root attributes from a JSON file', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--symbol',
           '--svg-rootattrs',
           path.join(fixtureDir, 'svg-rootattrs.json'),
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /<svg[^>]*data-testid="sprite-root"/);
+        assert.match(sprite, /<svg[^>]*data-testid="sprite-root"/u);
       });
     });
   });
 
   describe('options', () => {
-    it('applies shape padding', async() => {
-      await withTempDir(async dir => {
+    it('applies shape padding', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--symbol',
           '--shape-spacing-padding=5',
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /viewBox="-5 -5 34 34"/);
-        assert.match(sprite, /id="one"/);
+        assert.match(sprite, /viewBox="-5 -5 34 34"/u);
+        assert.match(sprite, /id="one"/u);
       });
     });
   });
 
   describe('logging', () => {
-    it('writes log output when --log is set', async() => {
-      const { stdout } = await execCli(['--symbol', '--log=info', ...svgFiles]);
-      assert.match(stdout, /Created spriter/);
+    it('writes log output when --log is set', async () => {
+      const {stdout} = await execCli(['--symbol', '--log=info', ...svgFiles]);
+      assert.match(stdout, /Created spriter/u);
     });
   });
 
   describe('shape identifier options', () => {
-    it('traverses directory structures into shape IDs', async() => {
-      await withTempDir(async dir => {
+    it('traverses directory structures into shape IDs', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
-        await execCli(['--symbol', `--dest=${dest}`, './nested/**/*.svg'], { cwd: fixtureDir });
+        await execCli(['--symbol', `--dest=${dest}`, './nested/**/*.svg'], {cwd: fixtureDir});
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /id="nested--leaf"/);
+        assert.match(sprite, /id="nested--leaf"/u);
       });
     });
 
-    it('applies a custom shape ID separator', async() => {
-      await withTempDir(async dir => {
+    it('applies a custom shape ID separator', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
-        await execCli(['--symbol', '--shape-id-separator=__', `--dest=${dest}`, './nested/**/*.svg'], { cwd: fixtureDir });
+        await execCli(['--symbol', '--shape-id-separator=__', `--dest=${dest}`, './nested/**/*.svg'], {cwd: fixtureDir});
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /id="nested__leaf"/);
-        assert.doesNotMatch(sprite, /id="nested--leaf"/);
+        assert.match(sprite, /id="nested__leaf"/u);
+        assert.doesNotMatch(sprite, /id="nested--leaf"/u);
       });
     });
 
-    it('applies a custom shape ID generator', async() => {
-      await withTempDir(async dir => {
+    it('applies a custom shape ID generator', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-id-generator=%s-icon', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /id="one-icon"/);
-        assert.match(sprite, /id="two-icon"/);
+        assert.match(sprite, /id="one-icon"/u);
+        assert.match(sprite, /id="two-icon"/u);
       });
     });
 
-    it('replaces whitespace in shape IDs', async() => {
-      await withTempDir(async dir => {
+    it('replaces whitespace in shape IDs', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-id-whitespace=-', `--dest=${dest}`, path.join(fixtureDir, 'with space.svg')]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /id="with-space"/);
+        assert.match(sprite, /id="with-space"/u);
       });
     });
 
-    it('uses a custom CSS pseudo class separator', async() => {
-      await withTempDir(async dir => {
+    it('uses a custom CSS pseudo class separator', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', `--dest=${dest}`, path.join(fixtureDir, 'button~hover.svg')]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-button:hover/);
+        assert.match(css, /\.svg-button:hover/u);
       });
     });
   });
 
   describe('shape dimension and spacing options', () => {
-    it('scales shapes to the maximum dimensions', async() => {
-      await withTempDir(async dir => {
+    it('scales shapes to the maximum dimensions', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--shape-dim-width=12', '--shape-dim-height=12', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-one-dims {\s*width: 12px;\s*height: 12px;/);
-        assert.match(css, /\.svg-two-dims {\s*width: 12px;\s*height: 12px;/);
+        assert.match(css, /\.svg-one-dims \{\s*width: 12px;\s*height: 12px;/u);
+        assert.match(css, /\.svg-two-dims \{\s*width: 12px;\s*height: 12px;/u);
       });
     });
 
-    it('rounds shape dimensions to the given precision', async() => {
-      await withTempDir(async dir => {
+    it('rounds shape dimensions to the given precision', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--shape-dim-precision=1', `--dest=${dest}`, path.join(fixtureDir, 'half.svg')]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /width: 24\.4px;/);
-        assert.match(css, /height: 12\.1px;/);
+        assert.match(css, /width: 24\.4px;/u);
+        assert.match(css, /height: 12\.1px;/u);
       });
     });
 
-    it('accepts the shape dimension attributes option', async() => {
-      await withTempDir(async dir => {
+    it('accepts the shape dimension attributes option', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--view', '--view-render-css', '--view-bust=false', '--shape-dim-attributes', `--dest=${dest}`, path.join(fixtureDir, 'one.svg')]);
 
         const sprite = readFile(path.join(dest, 'view', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /width="24" height="24"/);
+        assert.match(sprite, /width="24" height="24"/u);
       });
     });
 
-    it('applies spacing box padding', async() => {
-      await withTempDir(async dir => {
+    it('applies spacing box padding', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--shape-spacing-padding=4', '--shape-spacing-box=padding', `--dest=${dest}`, path.join(fixtureDir, 'one.svg')]);
 
         const sprite = readFile(path.join(dest, 'css', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /viewBox="-4 -4 32 32"/);
+        assert.match(sprite, /viewBox="-4 -4 32 32"/u);
       });
     });
   });
 
   describe('shape file options', () => {
-    it('adds meta data from a YAML file', async() => {
-      await withTempDir(async dir => {
+    it('adds meta data from a YAML file', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-meta', path.join(fixtureDir, 'meta.yaml'), `--dest=${dest}`, path.join(fixtureDir, 'one.svg')]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /aria-labelledby=/);
-        assert.match(sprite, /<title[^>]*>Alpha<\/title>/);
-        assert.match(sprite, /<desc[^>]*>First icon<\/desc>/);
+        assert.match(sprite, /aria-labelledby=/u);
+        assert.match(sprite, /<title[^>]*>Alpha<\/title>/u);
+        assert.match(sprite, /<desc[^>]*>First icon<\/desc>/u);
       });
     });
 
-    it('aligns shapes from a YAML file', async() => {
-      await withTempDir(async dir => {
+    it('aligns shapes from a YAML file', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-layout=vertical', '--shape-align', path.join(fixtureDir, 'align.yaml'), `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-one {[\s\S]*100% 0 no-repeat/);
+        assert.match(css, /\.svg-one \{[\s\S]*100% 0 no-repeat/u);
       });
     });
 
-    it('writes intermediate SVG files to a custom destination', async() => {
-      await withTempDir(async dir => {
+    it('writes intermediate SVG files to a custom destination', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-dest=intermediate', `--dest=${dest}`, ...svgFiles]);
 
         const intermediate = readFile(path.join(dest, 'intermediate', 'one.svg'));
-        assert.match(intermediate, /^<\?xml/);
+        assert.match(intermediate, /^<\?xml/u);
       });
     });
 
-    it('applies a custom SVGO transform configuration', async() => {
-      await withTempDir(async dir => {
+    it('applies a custom SVGO transform configuration', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=svgo', '--shape-transform-svgo', path.join(fixtureDir, 'svgo.config.json'), `--dest=${dest}`, path.join(fixtureDir, 'comment.svg')]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /<!--KEEP-SPECIAL-->/);
+        assert.match(sprite, /<!--KEEP-SPECIAL-->/u);
       });
     });
   });
 
   describe('svg output options', () => {
-    it('omits the XML declaration on request', async() => {
-      await withTempDir(async dir => {
+    it('omits the XML declaration on request', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--svg-xmldecl=false', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.doesNotMatch(sprite, /^<\?xml/);
+        assert.doesNotMatch(sprite, /^<\?xml/u);
       });
     });
 
-    it('omits the doctype declaration on request', async() => {
-      await withTempDir(async dir => {
+    it('omits the doctype declaration on request', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-bust=false', `--dest=${dest}`, path.join(fixtureDir, 'doctype.svg')]);
 
         const sprite = readFile(path.join(dest, 'css', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /<!DOCTYPE/);
+        assert.match(sprite, /<!DOCTYPE/u);
       });
 
-      await withTempDir(async dir => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-bust=false', '--svg-doctype=false', `--dest=${dest}`, path.join(fixtureDir, 'doctype.svg')]);
 
         const sprite = readFile(path.join(dest, 'css', 'svg', 'sprite.css.svg'));
-        assert.doesNotMatch(sprite, /<!DOCTYPE/);
+        assert.doesNotMatch(sprite, /<!DOCTYPE/u);
       });
     });
 
-    it('disables ID namespacing', async() => {
-      await withTempDir(async dir => {
+    it('disables ID namespacing', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=', '--svg-namespace-ids=false', `--dest=${dest}`, path.join(fixtureDir, 'ref.svg')]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /id="arrow"/);
-        assert.match(sprite, /href="#arrow"/);
+        assert.match(sprite, /id="arrow"/u);
+        assert.match(sprite, /href="#arrow"/u);
       });
     });
 
-    it('disables CSS class namespacing', async() => {
-      await withTempDir(async dir => {
+    it('disables CSS class namespacing', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=', '--svg-namespace-classnames=false', `--dest=${dest}`, path.join(fixtureDir, 'ref.svg')]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /class="ic"/);
+        assert.match(sprite, /class="ic"/u);
       });
     });
 
-    it('applies a namespace ID prefix', async() => {
-      await withTempDir(async dir => {
+    it('applies a namespace ID prefix', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=', '--svg-namespace-prefix=p-', `--dest=${dest}`, path.join(fixtureDir, 'ref.svg')]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /id="p-aarrow"/);
-        assert.match(sprite, /href="#p-aarrow"/);
+        assert.match(sprite, /id="p-aarrow"/u);
+        assert.match(sprite, /href="#p-aarrow"/u);
       });
     });
 
-    it('omits sprite dimension attributes on request', async() => {
-      await withTempDir(async dir => {
+    it('omits sprite dimension attributes on request', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--view', '--view-render-css', '--view-bust=false', '--svg-dimattrs=false', `--dest=${dest}`, path.join(fixtureDir, 'one.svg')]);
 
         const sprite = readFile(path.join(dest, 'view', 'svg', 'sprite.css.svg'));
         const rootOpen = sprite.slice(0, sprite.indexOf('>'));
-        assert.doesNotMatch(rootOpen, /width="/);
-        assert.doesNotMatch(rootOpen, /height="/);
+        assert.doesNotMatch(rootOpen, /width="/u);
+        assert.doesNotMatch(rootOpen, /height="/u);
       });
     });
   });
 
   describe('css mode configuration', () => {
-    it('writes to a custom mode output directory', async() => {
-      await withTempDir(async dir => {
+    it('writes to a custom mode output directory', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-dest=custom', `--dest=${dest}`, ...svgFiles]);
 
@@ -453,114 +443,108 @@ describe('svg-sprite-cli', () => {
       });
     });
 
-    it('creates a vertical sprite layout', async() => {
-      await withTempDir(async dir => {
+    it('creates a vertical sprite layout', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-layout=vertical', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-two {[\s\S]*?0 100% no-repeat/);
+        assert.match(css, /\.svg-two \{[\s\S]*?0 100% no-repeat/u);
       });
     });
 
-    it('creates a horizontal sprite layout', async() => {
-      await withTempDir(async dir => {
+    it('creates a horizontal sprite layout', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-layout=horizontal', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-two {[\s\S]*?100% 0 no-repeat/);
+        assert.match(css, /\.svg-two \{[\s\S]*?100% 0 no-repeat/u);
       });
     });
 
-    it('adds a common selector rule for all shapes', async() => {
-      await withTempDir(async dir => {
+    it('adds a common selector rule for all shapes', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-common=all-icons', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.all-icons {/);
+        assert.match(css, /\.all-icons \{/u);
       });
     });
 
-    it('creates a preprocessor mixin for all shapes', async() => {
-      await withTempDir(async dir => {
+    it('creates a preprocessor mixin for all shapes', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
-        await execCli(['--css', '--css-render-scss', '--css-bust=false', '--css-mixin=svg-sprite', `--dest=${dest}`, ...svgFiles]);
+        await execCli(['--css', '--css-render-scss', '--css-bust=false', '--css-mixin=svgforge', `--dest=${dest}`, ...svgFiles]);
 
         const scss = readFile(path.join(dest, 'css', 'sprite.scss'));
-        assert.match(scss, /@mixin svg-sprite {/);
-        assert.match(scss, /@include svg-sprite;/);
+        assert.match(scss, /@mixin svgforge \{/u);
+        assert.match(scss, /@include svgforge;/u);
       });
     });
 
-    it('uses a custom CSS selector prefix', async() => {
-      await withTempDir(async dir => {
+    it('uses a custom CSS selector prefix', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-prefix=.icn-%s', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.icn-one {/);
-        assert.doesNotMatch(css, /\.svg-one {/);
+        assert.match(css, /\.icn-one \{/u);
+        assert.doesNotMatch(css, /\.svg-one \{/u);
       });
     });
 
-    it('inlines the shape dimensions', async() => {
-      await withTempDir(async dir => {
+    it('inlines the shape dimensions', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-dimensions=', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-one {[\s\S]*width: 24px;/);
-        assert.doesNotMatch(css, /\.svg-one-dims/);
+        assert.match(css, /\.svg-one \{[\s\S]*width: 24px;/u);
+        assert.doesNotMatch(css, /\.svg-one-dims/u);
       });
     });
 
-    it('uses a custom sprite path and filename', async() => {
-      await withTempDir(async dir => {
+    it('uses a custom sprite path and filename', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', '--css-bust=false', '--css-sprite=sp.svg', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /url\("sp\.svg"\)/);
+        assert.match(css, /url\("sp\.svg"\)/u);
         assert.equal(fs.existsSync(path.join(dest, 'css', 'sp.svg')), true);
       });
     });
 
-    it('adds a cache-busting hash by default', async() => {
-      await withTempDir(async dir => {
+    it('adds a cache-busting hash by default', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--css', '--css-render-css', `--dest=${dest}`, ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /url\("svg\/sprite\.css-[a-f\d]+\.svg"\)/);
+        assert.match(css, /url\("svg\/sprite\.css-[\da-f]+\.svg"\)/u);
 
         const spriteFiles = fs.readdirSync(path.join(dest, 'css', 'svg'));
         assert.equal(spriteFiles.includes('sprite.css.svg'), false);
-        assert.match(spriteFiles.join(' '), /sprite\.css-[a-f\d]+\.svg/);
+        assert.match(spriteFiles.join(' '), /sprite\.css-[\da-f]+\.svg/u);
       });
     });
   });
 
   describe('stylesheets and example documents', () => {
-    it('renders Sass, LESS and Stylus stylesheets', async() => {
-      await withTempDir(async dir => {
+    it('renders Sass stylesheets', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
-        await execCli(['--css', '--css-render-scss', '--css-render-less', '--css-render-styl', '--css-bust=false', `--dest=${dest}`, ...svgFiles]);
+        await execCli(['--css', '--css-render-scss', '--css-bust=false', `--dest=${dest}`, ...svgFiles]);
 
         const scss = readFile(path.join(dest, 'css', 'sprite.scss'));
-        assert.match(scss, /\.svg-one/);
-
-        const less = readFile(path.join(dest, 'css', 'sprite.less'));
-        assert.match(less, /\.svg-one/);
-
-        const styl = readFile(path.join(dest, 'css', 'sprite.styl'));
-        assert.match(styl, /\.svg-one/);
+        assert.match(scss, /\.svg-one/u);
       });
     });
 
-    it('renders stylesheets in every mode', async() => {
-      await withTempDir(async dir => {
+    it('renders stylesheets in every mode', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--css',
@@ -576,17 +560,18 @@ describe('svg-sprite-cli', () => {
           '--css-bust=false',
           '--view-bust=false',
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         for (const mode of ['css', 'view', 'defs', 'symbol', 'stack']) {
-          assert.match(readFile(path.join(dest, mode, 'sprite.css')), /svg-one/);
+          // eslint-disable-next-line node-test/no-conditional-assertion -- Assertion per fixed, known mode list (not a runtime conditional).
+          assert.match(readFile(path.join(dest, mode, 'sprite.css')), /svg-one/u);
         }
       });
     });
 
-    it('uses a custom stylesheet template and destination', async() => {
-      await withTempDir(async dir => {
+    it('uses a custom stylesheet template and destination', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--css',
@@ -597,7 +582,7 @@ describe('svg-sprite-cli', () => {
           '--css-render-css-dest',
           'custom.css',
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const custom = readFile(path.join(dest, 'css', 'custom.css'));
@@ -605,8 +590,8 @@ describe('svg-sprite-cli', () => {
       });
     });
 
-    it('uses a custom example template and destination', async() => {
-      await withTempDir(async dir => {
+    it('uses a custom example template and destination', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--css',
@@ -618,7 +603,7 @@ describe('svg-sprite-cli', () => {
           '--css-example-dest',
           'preview.html',
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const preview = readFile(path.join(dest, 'css', 'preview.html'));
@@ -626,45 +611,45 @@ describe('svg-sprite-cli', () => {
       });
     });
 
-    it('renders example documents for every mode', async() => {
-      await withTempDir(async dir => {
+    it('renders example documents for every mode', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--symbol-example', `--dest=${dest}`, ...svgFiles]);
         await execCli(['--defs', '--defs-example', `--dest=${dest}`, ...svgFiles]);
         await execCli(['--view', '--view-example', '--view-bust=false', `--dest=${dest}`, ...svgFiles]);
         await execCli(['--stack', '--stack-example', `--dest=${dest}`, ...svgFiles]);
 
-        assert.match(readFile(path.join(dest, 'symbol', 'sprite.symbol.html')), /<html/i);
-        assert.match(readFile(path.join(dest, 'defs', 'sprite.defs.html')), /<html/i);
-        assert.match(readFile(path.join(dest, 'view', 'sprite.view.html')), /<html/i);
-        assert.match(readFile(path.join(dest, 'stack', 'sprite.stack.html')), /<html/i);
+        assert.match(readFile(path.join(dest, 'symbol', 'sprite.symbol.html')), /<html/iu);
+        assert.match(readFile(path.join(dest, 'defs', 'sprite.defs.html')), /<html/iu);
+        assert.match(readFile(path.join(dest, 'view', 'sprite.view.html')), /<html/iu);
+        assert.match(readFile(path.join(dest, 'stack', 'sprite.stack.html')), /<html/iu);
       });
     });
   });
 
   describe('inline sprites and variables', () => {
-    it('creates an inline defs sprite variant', async() => {
-      await withTempDir(async dir => {
+    it('creates an inline defs sprite variant', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--defs', '--defs-inline', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /style="position:absolute"/);
+        assert.match(sprite, /style="position:absolute"/u);
       });
     });
 
-    it('creates an inline symbol sprite variant', async() => {
-      await withTempDir(async dir => {
+    it('creates an inline symbol sprite variant', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--symbol-inline', `--dest=${dest}`, ...svgFiles]);
 
         const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
-        assert.match(sprite, /style="position:absolute"/);
+        assert.match(sprite, /style="position:absolute"/u);
       });
     });
 
-    it('passes Mustache variables to templates', async() => {
-      await withTempDir(async dir => {
+    it('passes Mustache variables to templates', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--symbol',
@@ -676,7 +661,7 @@ describe('svg-sprite-cli', () => {
           '--variables',
           path.join(fixtureDir, 'vars.json'),
           `--dest=${dest}`,
-          ...svgFiles
+          ...svgFiles,
         ]);
 
         const preview = readFile(path.join(dest, 'symbol', 'preview.html'));
@@ -686,16 +671,16 @@ describe('svg-sprite-cli', () => {
   });
 
   describe('short aliases', () => {
-    it('accepts the short argument syntax', async() => {
-      await withTempDir(async dir => {
+    it('accepts the short argument syntax', async () => {
+      await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli(['-c', '-D', dest, '--ccss', '--cx', '--css-bust=false', ...svgFiles]);
 
         const css = readFile(path.join(dest, 'css', 'sprite.css'));
-        assert.match(css, /\.svg-one {/);
+        assert.match(css, /\.svg-one \{/u);
 
         const example = readFile(path.join(dest, 'css', 'sprite.css.html'));
-        assert.match(example, /<html/i);
+        assert.match(example, /<html/iu);
       });
     });
   });
