@@ -1,5 +1,4 @@
 /node_modules/
-/pnpm-workspace.yaml
 /npm-debug.log
 /coverage/
 /tmp/
