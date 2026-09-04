@@ -1,5 +1,7 @@
 # svgforge-cli
 
+[![npm version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![npm downloads][npm-downloads]][npm-url]
+
 [Command line interface](https://github.com/svgforge/svgforge-cli) for [svgforge](https://github.com/svgforge/svgforge) — create optimized **SVG sprites** of several types along with accompanying stylesheet resources and example documents.
 
 ## Installation
@@ -99,3 +101,13 @@ The test suite spawns the CLI as a child process against fixtures in `test/fixtu
 ## License
 
 [MIT](LICENSE) © Felix Müller
+
+[npm-url]: https://www.npmjs.com/package/svgforge-cli
+[npm-image]: https://img.shields.io/npm/v/svgforge-cli?logo=npm&logoColor=fff
+[npm-downloads]: https://img.shields.io/npm/dm/svgforge-cli
+
+[ci-url]: https://github.com/svgforge/svgforge-cli/actions/workflows/test.yml?query=branch%3Amain
+[ci-image]: https://img.shields.io/github/actions/workflow/status/svgforge/svgforge-cli/test.yml?branch=main&label=CI&logo=github
+
+[coveralls-url]: https://coveralls.io/github/svgforge/svgforge-cli?branch=main
+[coveralls-image]: https://img.shields.io/coveralls/github/svgforge/svgforge-cli/main?logo=coveralls
