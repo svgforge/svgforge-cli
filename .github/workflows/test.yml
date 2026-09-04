@@ -17,19 +17,8 @@ permissions:
 
 jobs:
   test:
-    name: Node ${{ matrix.node }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        node: [24]
-        include:
-          - os: macos-latest
-            node: 24
-          - os: windows-latest
-            node: 24
+    name: Node 24 on ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Clone repository
@@ -40,11 +29,17 @@ jobs:
       - name: Install pnpm and Node.js
         uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
         with:
-          runtime: node@${{ matrix.node }}
+          runtime: node@24
           cache: true
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Run Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          path-to-lcov: coverage/lcov.info
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
