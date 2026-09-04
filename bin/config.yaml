@@ -135,107 +135,6 @@ svg:
     default: -1
     map: svg.precision
 
-css:
-  description: Activates the «css» mode
-  default: false
-  alias: c
-
-  dest:
-    description: Mode specific output directory
-    default: css
-    map: mode.css.dest
-
-  layout:
-    description: Sprite layout ("vertical"/"horizontal"/"diagonal"/"packed")
-    default: packed
-    alias: cl
-    map: mode.css.layout
-
-  common:
-    description: Common CSS rule selector for all shapes
-    default:
-    map: mode.css.common
-
-  mixin:
-    description: Preprocessor mixin name with properties for all shapes
-    default:
-    map: mode.css.mixin
-
-  prefix:
-    description: CSS selector prefix for all shapes (including placeholders)
-    default: .svg-%s
-    map: mode.css.prefix
-
-  dimensions:
-    description: CSS selector suffix for shape dimension rules ("" for inline)
-    default: -dims
-    map: mode.css.dimensions
-
-  sprite:
-    description: Sprite path and filename (relative to --css-dest)
-    default: svg/sprite.css.svg
-    alias: cs
-    map: mode.css.sprite
-
-  bust:
-    description: Enable cache busting
-    default: true
-    map: mode.css.bust
-
-  render:
-    css:
-      description: Whether to render a CSS stylesheet
-      default: false
-      alias: ccss
-
-      template:
-        description: CSS stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/css/sprite.css
-        map: mode.css.render.css.template
-
-      dest:
-        description: CSS stylesheet destination (relative to the --css-dest)
-        default: sprite.css
-        map: mode.css.render.css.dest
-
-    scss:
-      description: Whether to render a Sass stylesheet (SCSS)
-      default: false
-      alias: cscss
-
-      template:
-        description: Sass stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/css/sprite.scss
-        map: mode.css.render.scss.template
-
-      dest:
-        description: Sass stylesheet destination (relative to the --css-dest)
-        default: sprite.scss
-        map: mode.css.render.scss.dest
-
-    "*":
-      description: Custom output renderings
-      template:
-        description: Custom output Mustache template (relative to svgforge basedir)
-
-      dest:
-        description: Custom output destination (relative to the --css-dest)
-
-  example:
-    description: Whether to render an example HTML document
-    default: false
-    alias: cx
-
-    template:
-      description: HTML document Mustache template (relative to svgforge basedir)
-      default: tmpl/css/sprite.html
-      map: mode.css.example.template
-
-    dest:
-      description: HTML document destination (relative to the --css-dest)
-      default: sprite.css.html
-      map: mode.css.example.dest
-
 view:
   description: Activates the «view» mode
   default: false
@@ -246,35 +145,9 @@ view:
     default: view
     map: mode.view.dest
 
-  layout:
-    description: Sprite layout ("vertical"/"horizontal"/"diagonal"/"packed")
-    default: packed
-    alias: vl
-    map: mode.view.layout
-
-  common:
-    description: Common CSS rule selector for all shapes
-    default:
-    map: mode.view.common
-
-  mixin:
-    description: Preprocessor mixin name with properties for all shapes
-    default:
-    map: mode.view.mixin
-
-  prefix:
-    description: CSS selector prefix for all shapes (including placeholders)
-    default: .svg-%s
-    map: mode.view.prefix
-
-  dimensions:
-    description: CSS selector suffix for shape dimension rules ("" for inline)
-    default: -dims
-    map: mode.view.dimensions
-
   sprite:
     description: Sprite path and filename (relative to --view-dest)
-    default: svg/sprite.css.svg
+    default: svg/sprite.view.svg
     alias: vs
     map: mode.view.sprite
 
@@ -282,45 +155,6 @@ view:
     description: Enable cache busting
     default: true
     map: mode.view.bust
-
-  render:
-    css:
-      description: Whether to render a CSS stylesheet
-      default: false
-      alias: vcss
-
-      template:
-        description: CSS stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/css/sprite.css
-        map: mode.view.render.css.template
-
-      dest:
-        description: CSS stylesheet destination (relative to the --view-dest)
-        default: sprite.css
-        map: mode.view.render.css.dest
-
-    scss:
-      description: Whether to render a Sass stylesheet (SCSS)
-      default: false
-      alias: vscss
-
-      template:
-        description: Sass stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/css/sprite.scss
-        map: mode.view.render.scss.template
-
-      dest:
-        description: Sass stylesheet destination (relative to the --view-dest)
-        default: sprite.scss
-        map: mode.view.render.scss.dest
-
-    "*":
-      description: Custom output renderings
-      template:
-        description: Custom output Mustache template (relative to svgforge basedir)
-
-      dest:
-        description: Custom output destination (relative to the --view-dest)
 
   example:
     description: Whether to render an example HTML document
@@ -384,21 +218,6 @@ defs:
         default: sprite.css
         map: mode.defs.render.css.dest
 
-    scss:
-      description: Whether to render a Sass stylesheet (SCSS)
-      default: false
-      alias: dscss
-
-      template:
-        description: Sass stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/common/sprite.scss
-        map: mode.defs.render.scss.template
-
-      dest:
-        description: Sass stylesheet destination (relative to the --defs-dest)
-        default: sprite.scss
-        map: mode.defs.render.scss.dest
-
     "*":
       description: Custom output renderings
       template:
@@ -449,7 +268,7 @@ symbol:
     map: mode.symbol.dimensions
 
   sprite:
-    description: Sprite path and filename (relative to --css-dest)
+    description: Sprite path and filename (relative to --symbol-dest)
     default: svg/sprite.css.svg
     alias: ss
     map: mode.symbol.sprite
@@ -463,7 +282,7 @@ symbol:
     css:
       description: Whether to render a CSS stylesheet
       default: false
-      alias: scss
+      alias: sc
 
       template:
         description: CSS stylesheet Mustache template (relative to svgforge basedir)
@@ -474,21 +293,6 @@ symbol:
         description: CSS stylesheet destination (relative to the --symbol-dest)
         default: sprite.css
         map: mode.symbol.render.css.dest
-
-    scss:
-      description: Whether to render a Sass stylesheet (SCSS)
-      default: false
-      alias: sscss
-
-      template:
-        description: Sass stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/common/sprite.scss
-        map: mode.symbol.render.scss.template
-
-      dest:
-        description: Sass stylesheet destination (relative to the --symbol-dest)
-        default: sprite.scss
-        map: mode.symbol.render.scss.dest
 
     "*":
       description: Custom output renderings
@@ -515,7 +319,7 @@ symbol:
       map: mode.symbol.example.template
 
     dest:
-      description: HTML document destination (relative to the --css-dest)
+      description: HTML document destination (relative to the --symbol-dest)
       default: sprite.symbol.html
       map: mode.symbol.example.dest
 
@@ -540,7 +344,7 @@ stack:
     map: mode.stack.dimensions
 
   sprite:
-    description: Sprite path and filename (relative to --css-dest)
+    description: Sprite path and filename (relative to --stack-dest)
     default: svg/sprite.css.svg
     alias: Ss
     map: mode.stack.sprite
@@ -559,7 +363,7 @@ stack:
     css:
       description: Whether to render a CSS stylesheet
       default: false
-      alias: Scss
+      alias: Sc
 
       template:
         description: CSS stylesheet Mustache template (relative to svgforge basedir)
@@ -570,21 +374,6 @@ stack:
         description: CSS stylesheet destination (relative to the --stack-dest)
         default: sprite.css
         map: mode.stack.render.css.dest
-
-    scss:
-      description: Whether to render a Sass stylesheet (SCSS)
-      default: false
-      alias: Sscss
-
-      template:
-        description: Sass stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/common/sprite.scss
-        map: mode.stack.render.scss.template
-
-      dest:
-        description: Sass stylesheet destination (relative to the --stack-dest)
-        default: sprite.scss
-        map: mode.stack.render.scss.dest
 
     "*":
       description: Custom output renderings
@@ -605,7 +394,7 @@ stack:
       map: mode.stack.example.template
 
     dest:
-      description: HTML document destination (relative to the --css-dest)
+      description: HTML document destination (relative to the --stack-dest)
       default: sprite.stack.html
       map: mode.stack.example.dest
 

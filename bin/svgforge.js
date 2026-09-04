@@ -19,7 +19,6 @@ import path from 'node:path';
 import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 import merge from 'lodash.merge';
-import File from 'vinyl';
 import {load} from 'js-yaml';
 import yargs from 'yargs';
 import SVGSpriter from 'svgforge';
@@ -33,14 +32,14 @@ const {version} = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'pack
 
  @type {string[]}
  */
-const MODES = ['css', 'view', 'defs', 'symbol', 'stack'];
+const MODES = ['view', 'defs', 'symbol', 'stack'];
 
 /**
  All supported stylesheet render types
 
  @type {string[]}
  */
-const RENDER_TYPES = ['css', 'scss'];
+const RENDER_TYPES = ['css'];
 
 /**
  Yargs argument parser instance
@@ -104,7 +103,7 @@ const optionsMap = {};
 /**
  Resolve a path relative to the installed svgforge library
 
- Default template files (e.g. "tmpl/css/sprite.css") ship with the
+ Default template files (e.g. "tmpl/stack/sprite.html") ship with the
  svgforge library package, so they are resolved against its install
  location rather than against this CLI package.
 
@@ -121,7 +120,7 @@ function resolveSvgForgePath(target) {
  Add a command line option and recursively register all of its children
 
  @param {Yargs} parser Yargs instance to extend
- @param {string} name Hyphenated option name (e.g. "css-render-css")
+ @param {string} name Hyphenated option name (e.g. "defs-render-css")
  @param {OptionDefinition} option Option configuration
  @returns {Yargs} The extended yargs instance
  */
@@ -200,7 +199,7 @@ function writeFiles(files) {
       continue;
     }
 
-    if (file instanceof File) {
+    if (typeof file.path === 'string') {
       fs.mkdirSync(path.dirname(file.path), {recursive: true});
       fs.writeFileSync(file.path, file.contents);
       ++written;
@@ -241,9 +240,9 @@ function registerOptions() {
     .version(version)
     .help('help', 'Display this help information')
     .wrap(null)
-    .example('$0 --css --css-render-css --css-example --dest=out assets/*.svg', 'Create a CSS sprite of the given SVG files including example document to the subdirectory "out"')
-    .example('$0 -cD out --ccss --cx assets/*.svg', 'Same as above')
-    .example('$0 -cD out --cscss -p 10 assets/*.svg', 'Render Sass instead of CSS and add 10px padding around all shapes (no example document this time)')
+    .example('$0 --view --view-example --dest=out assets/*.svg', 'Create a view sprite of the given SVG files including example document to the subdirectory "out"')
+    .example('$0 --defs --defs-render-css --defs-example --dest=out assets/*.svg', 'Create a defs sprite of the given SVG files including a CSS stylesheet and example document')
+    .example('$0 -S -p 10 assets/*.svg', 'Create a stack sprite and add 10px padding around all shapes')
     .showHelpOnFail(true)
     .demandCommand(1);
 
@@ -311,11 +310,16 @@ function loadExternalConfig(cfg, argv) {
           continue;
         }
 
-        const defaultMode = {
-          render: {
-            css: true,
-          },
-        };
+        // The view mode no longer renders stylesheets
+        let defaultMode = {};
+        if (mode !== 'view') {
+          defaultMode = {
+            render: {
+              css: true,
+            },
+          };
+        }
+
         externalConfig.mode[mode] = defaultMode;
         JSONConfig.mode[mode] = defaultMode;
       }
@@ -414,21 +418,23 @@ function refineSpriteModes(cfg, argv) {
 
     const {render} = cfg.mode[mode];
 
-    // Remove excessive render types
-    for (const renderType of RENDER_TYPES) {
-      const arg = `${mode}-render-${renderType}`;
-      if (
-        Object.hasOwn(render, renderType)
-        && !Object.hasOwn(argv, arg)
-        && (!Object.hasOwn(JSONConfig.mode, mode)
-          || !Object.hasOwn(JSONConfig.mode[mode], 'render')
-          || !Object.hasOwn(JSONConfig.mode[mode].render, renderType))
-      ) {
-        delete render[renderType];
+    // Remove excessive render types (modes like «view» have no stylesheets)
+    if (render) {
+      for (const renderType of RENDER_TYPES) {
+        const arg = `${mode}-render-${renderType}`;
+        if (
+          Object.hasOwn(render, renderType)
+          && !Object.hasOwn(argv, arg)
+          && (!Object.hasOwn(JSONConfig.mode, mode)
+            || !Object.hasOwn(JSONConfig.mode[mode], 'render')
+            || !Object.hasOwn(JSONConfig.mode[mode].render, renderType))
+        ) {
+          delete render[renderType];
+        }
       }
     }
 
-    if (cfg.mode[mode].dimensions.length === 0) {
+    if (Array.isArray(cfg.mode[mode].dimensions) && cfg.mode[mode].dimensions.length === 0) {
       cfg.mode[mode].dimensions = true;
     }
   }

@@ -26,22 +26,22 @@ Run `svgforge --help` to get a full list of all available options, or consult th
 
 ### Examples
 
-Create a CSS sprite of all SVG files in `assets/` and write the result — along with an example HTML document — to the `out/` directory:
+Create a `view` sprite of all SVG files in `assets/` and write the result — along with an example HTML document — to the `out/` directory:
 
 ```bash
-svgforge --css --css-render-css --css-example --css-bust=false --dest=out assets/*.svg
+svgforge --view --view-example --view-bust=false --dest=out assets/*.svg
 ```
 
-The same using the shorter argument syntax:
+Create a `defs` sprite with an accompanying CSS stylesheet and example document:
 
 ```bash
-svgforge -cD out --ccss --cx assets/*.svg
+svgforge --defs --defs-render-css --defs-example --dest=out assets/*.svg
 ```
 
-Render a Sass stylesheet instead of plain CSS and add a 10px padding around all shapes:
+Add a 10px padding around all shapes of a `stack` sprite:
 
 ```bash
-svgforge -cD out --cscss -p 10 assets/*.svg
+svgforge --stack -p 10 assets/*.svg
 ```
 
 Instead of passing options on the command line you can also use an external JSON config file:
@@ -54,11 +54,10 @@ svgforge --config config.json assets/*.svg
 
 ### Sprite modes
 
-The CLI supports all five sprite modes of svgforge. Activate them individually or combine them in a single run (e.g. `--css --symbol`):
+The CLI supports all four sprite modes of svgforge. Activate them individually or combine them in a single run (e.g. `--view --symbol`):
 
 | Mode | Flag | Description |
 | ---- | ---- | ----------- |
-| `css` | `--css` / `-c` | Traditional CSS sprite with a stylesheet |
 | `view` | `--view` / `-v` | SVG view-based sprite |
 | `defs` | `--defs` / `-d` | Sprite of `<defs>` elements |
 | `symbol` | `--symbol` / `-s` | Sprite of `<symbol>` elements for inline embedding |

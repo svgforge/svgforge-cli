@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Removed: «css» sprite mode and view stylesheet rendering
+
+* Drop the `css` sprite mode entirely (`--css`, `--ccss`, `--cscss`,
+  `--css-*` flags, the `css` entry in the mode table and the command-line
+  reference examples)
+* Remove the `view` stylesheet rendering (`--view-render-css`, `--view-render-scss`
+  and their template/destination options); the `view` mode now emits only the
+  SVG sprite with `<view>` fragment elements and an optional HTML example.
+  For background-image sprite usage use the `stack` mode instead
+* Keep the plain (non-`background-position`) CSS/SCSS rendering of the
+  `defs`, `symbol` and `stack` modes
+
 ### Refactor: ES6 classes, JSDoc and xo-default linting
 
 * Convert the CLI to modern ES6 with JSDoc type annotations
