@@ -2,13 +2,13 @@
   "name": "svgforge-cli",
   "version": "1.0.0",
   "description": "Command line interface for svgforge — create SVG sprites & stacks with stylesheet resources (CSS, Sass, etc.)",
-  "homepage": "https://github.com/joeda1/svgforge-cli",
+  "homepage": "https://github.com/svgforge/svgforge-cli",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joeda1/svgforge-cli.git"
+    "url": "git+https://github.com/svgforge/svgforge-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/joeda1/svgforge-cli/issues"
+    "url": "https://github.com/svgforge/svgforge-cli/issues"
   },
   "keywords": [
     "svg",
