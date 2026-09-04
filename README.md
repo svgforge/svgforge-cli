@@ -1,19 +1,19 @@
 # svgforge-cli
 
-[[Command line interface](https://github.com/joeda1/svgforge-cli) for [svgforge](https://github.com/svgforge/svgforge) — create optimized **SVG sprites** of several types along with accompanying stylesheet resources (CSS, Sass, LESS, Stylus, etc.).
+[Command line interface](https://github.com/svgforge/svgforge-cli) for [svgforge](https://github.com/svgforge/svgforge) — create optimized **SVG sprites** of several types along with accompanying stylesheet resources and example documents.
 
 ## Installation
 
 Install globally to use `svgforge` anywhere:
 
 ```bash
-npm install --global @joeda1/svgforge-cli
+npm install --global svgforge-cli
 ```
 
 Or as a project dependency (e.g. for usage in npm scripts):
 
 ```bash
-npm install --save-dev @joeda1/svgforge-cli
+npm install --save-dev svgforge-cli
 ```
 
 ## Usage
