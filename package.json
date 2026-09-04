@@ -39,7 +39,8 @@
   "scripts": {
     "lint": "xo",
     "fix": "xo --fix",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "test:coverage": "mkdir -p coverage && node --test --experimental-test-coverage --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info"
   },
   "dependencies": {
     "js-yaml": "^5.4.1",
