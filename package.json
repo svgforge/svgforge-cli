@@ -27,7 +27,7 @@
   ],
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "bin": {
     "svgforge": "./bin/svgforge.js"
