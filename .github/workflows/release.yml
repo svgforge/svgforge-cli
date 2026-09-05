@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_COLOR: 2
+  NODE: 24 # The Node.js version to publish from
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        with:
+          runtime: node@${{ env.NODE }}
+          cache: true
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Verify version matches tag
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
+            echo "Version mismatch: package.json has $PACKAGE_VERSION, tag is $GITHUB_REF_NAME"
+            exit 1
+          fi
+
+      - name: Configure npm authentication
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+
+      - name: Publish to npm
+        run: pnpm publish --no-git-checks --access public
