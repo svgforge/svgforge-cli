@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 1.0.1 — Drop remaining lodash/async dependencies
+
+* Bump the `svgforge` dependency to `^1.0.1` (native promise-based helpers,
+  `deepMerge` and `escapeHtml` utilities, no `async`/`lodash` dependencies)
+
+## 1.0.0 - First release
 
 ### Removed: «css» sprite mode and view stylesheet rendering
 
@@ -38,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.0.0-alpha — 2024-?
 
-* Standalone command line interface for svgforge (@joeda1 scope)
+* Standalone command line interface for svgforge
 * Support for all sprite modes (css, view, defs, symbol, stack) and render
   types (css, scss, html)
 * Yargs-based option parsing with dot-separated configuration mapping

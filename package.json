@@ -1,6 +1,6 @@
 {
   "name": "svgforge-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Command line interface for svgforge — create SVG sprites & stacks with stylesheet resources (CSS, Sass, etc.)",
   "homepage": "https://github.com/svgforge/svgforge-cli",
   "repository": {
@@ -12,8 +12,6 @@
   },
   "keywords": [
     "svg",
-    "sprite",
-    "spritesheet",
     "stack",
     "generator",
     "css",
@@ -45,7 +43,7 @@
   "dependencies": {
     "js-yaml": "^5.4.1",
     "lodash.merge": "^4.6.2",
-    "svgforge": "1.0.0",
+    "svgforge": "^1.0.1",
     "vinyl": "^3.0.1",
     "yargs": "^18.1.0"
   },
