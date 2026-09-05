@@ -6,16 +6,16 @@ on:
       - "v*"
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 env:
   FORCE_COLOR: 2
   NODE: 24 # The Node.js version to publish from
 
+permissions:
+  contents: write
+
 jobs:
   publish:
-    name: Publish to npm
+    name: Publish to npm and GitHub
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -48,3 +48,6 @@ jobs:
 
       - name: Publish to npm
         run: pnpm publish --no-git-checks --access public
+
+      - name: Create GitHub release
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes
