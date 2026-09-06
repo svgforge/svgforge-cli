@@ -4,6 +4,8 @@
 
 [Command line interface](https://github.com/svgforge/svgforge-cli) for [svgforge](https://github.com/svgforge/svgforge) — create optimized **SVG sprites** of several types along with accompanying stylesheet resources and example documents.
 
+The configuration options are [documented in the svgforge](https://github.com/svgforge/svgforge/blob/main/docs/configuration.md) library.
+
 ## Installation
 
 Install globally to use `svgforge` anywhere:
@@ -52,7 +54,7 @@ Instead of passing options on the command line you can also use an external JSON
 svgforge --config config.json assets/*.svg
 ```
 
-> **Tip:** A config file can be generated with the [online configurator](https://svgforge.github.io/svgforge/#json).
+> **Tip:** A config file can be generated with AI DeepWiki [online configurator](https://deepwiki.com/svgforge/svgforge-cli).
 
 ### Sprite modes
 
@@ -61,7 +63,7 @@ The CLI supports all four sprite modes of svgforge. Activate them individually o
 | Mode | Flag | Description |
 | ---- | ---- | ----------- |
 | `view` | `--view` / `-v` | SVG view-based sprite |
-| `defs` | `--defs` / `-d` | Sprite of `<defs>` elements |
+| `defs` | `--defs` / `-d` | Sprite of `<defs>` elements (legacy) |
 | `symbol` | `--symbol` / `-s` | Sprite of `<symbol>` elements for inline embedding |
 | `stack` | `--stack` / `-S` | Stacked sprite with `:target` CSS |
 
