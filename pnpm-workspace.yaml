@@ -2,3 +2,5 @@ allowBuilds:
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - svgforge@1.0.0 || 1.0.1
+overrides:
+  svgforge: link:../svgforge

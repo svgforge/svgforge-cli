@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Changed: re-add the `view` mode dimension stylesheet
+
+* Re-introduce the `--view-render-css` flag (and `--view-render-css-template` /
+  `--view-render-css-dest`) so the `view` mode can render the plain `.dims`
+  size stylesheet (width/height only) — matching the `defs`/`symbol`/`stack`
+  modes. Consumers size an icon by `class="<icon>-dims"` without knowing its
+  dimensions.
+* Fix a bug that made the CLI build **all** four modes on every run: yargs
+  populates every mode flag with `default: false`, so `Object.hasOwn(argv, mode)`
+  was true for all modes. Mode activation now checks the flag truthiness instead,
+  so only the explicitly requested modes are built.
+
 ## 1.0.1 — Drop remaining lodash/async dependencies
 
 * Bump the `svgforge` dependency to `^1.0.1` (native promise-based helpers,

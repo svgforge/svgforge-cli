@@ -310,18 +310,8 @@ function loadExternalConfig(cfg, argv) {
           continue;
         }
 
-        // The view mode no longer renders stylesheets
-        let defaultMode = {};
-        if (mode !== 'view') {
-          defaultMode = {
-            render: {
-              css: true,
-            },
-          };
-        }
-
-        externalConfig.mode[mode] = defaultMode;
-        JSONConfig.mode[mode] = defaultMode;
+        externalConfig.mode[mode] = {render: {css: true}};
+        JSONConfig.mode[mode] = {render: {css: true}};
       }
     }
 
@@ -411,20 +401,20 @@ function refineShapeConfig(cfg, argv) {
 function refineSpriteModes(cfg, argv) {
   // Run through all sprite modes
   for (const mode of MODES) {
-    if (!Object.hasOwn(argv, mode) && !Object.hasOwn(JSONConfig.mode, mode)) {
+    if (argv[mode] !== true && !Object.hasOwn(JSONConfig.mode, mode)) {
       delete cfg.mode[mode];
       continue;
     }
 
     const {render} = cfg.mode[mode];
 
-    // Remove excessive render types (modes like «view» have no stylesheets)
+    // Remove excessive render types
     if (render) {
       for (const renderType of RENDER_TYPES) {
         const arg = `${mode}-render-${renderType}`;
         if (
           Object.hasOwn(render, renderType)
-          && !Object.hasOwn(argv, arg)
+          && argv[arg] !== true
           && (!Object.hasOwn(JSONConfig.mode, mode)
             || !Object.hasOwn(JSONConfig.mode[mode], 'render')
             || !Object.hasOwn(JSONConfig.mode[mode].render, renderType))
@@ -450,7 +440,7 @@ function refineSpriteModes(cfg, argv) {
 function removeExcessiveExamples(cfg, argv) {
   for (const [mode, modeConfig] of Object.entries(cfg.mode)) {
     const example = `${mode}-example`;
-    if (!Object.hasOwn(argv, example) && (!Object.hasOwn(JSONConfig.mode, mode) || !Object.hasOwn(JSONConfig.mode[mode], 'example')) && Object.hasOwn(modeConfig, 'example')) {
+    if (argv[example] !== true && (!Object.hasOwn(JSONConfig.mode, mode) || !Object.hasOwn(JSONConfig.mode[mode], 'example')) && Object.hasOwn(modeConfig, 'example')) {
       delete modeConfig.example;
     }
   }

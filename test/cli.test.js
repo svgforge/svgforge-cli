@@ -143,6 +143,39 @@ describe('svgforge-cli', () => {
       });
     });
 
+    it('renders a dimension stylesheet for the view mode', async () => {
+      await withTemporaryDir(async dir => {
+        const dest = path.join(dir, 'out');
+        await execCli([
+          '--view',
+          '--view-render-css',
+          '--view-example',
+          '--view-bust=false',
+          `--dest=${dest}`,
+          ...svgFiles,
+        ]);
+
+        const css = readFile(path.join(dest, 'view', 'sprite.css'));
+        assert.match(css, /\.svg-one-dims\s*\{[^}]*width: 24px/u);
+        assert.match(css, /\.svg-two-dims\s*\{[^}]*width: 24px/u);
+
+        const example = readFile(path.join(dest, 'view', 'sprite.view.html'));
+        assert.match(example, /class="svg-one-dims"|class="svg-two-dims"/u);
+      });
+    });
+
+    it('creates only the requested sprite modes', async () => {
+      await withTemporaryDir(async dir => {
+        const dest = path.join(dir, 'out');
+        await execCli(['--view', '--view-bust=false', `--dest=${dest}`, ...svgFiles]);
+
+        assert.equal(fs.existsSync(path.join(dest, 'view', 'svg', 'sprite.view.svg')), true);
+        assert.equal(fs.existsSync(path.join(dest, 'defs')), false);
+        assert.equal(fs.existsSync(path.join(dest, 'symbol')), false);
+        assert.equal(fs.existsSync(path.join(dest, 'stack')), false);
+      });
+    });
+
     it('generates multiple sprite modes in one run', async () => {
       await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
