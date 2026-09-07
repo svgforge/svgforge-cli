@@ -18,11 +18,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import {fileURLToPath} from 'node:url';
-import merge from 'lodash.merge';
 import {load} from 'js-yaml';
 import yargs from 'yargs';
 import SVGSpriter from 'svgforge';
-import {isObject, zipObject} from 'svgforge/lib/svg-sprite/utils/index.js';
+import {deepMerge, isObject, zipObject} from 'svgforge/lib/svg-sprite/utils/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const {version} = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'package.json'), 'utf8'));
@@ -315,7 +314,7 @@ function loadExternalConfig(cfg, argv) {
       }
     }
 
-    merge(cfg, externalConfig);
+    deepMerge(cfg, externalConfig);
   } catch (error) {
     console.error('[ERROR] Skipping --config file due to errors ("%s")', error.message.trim());
   }

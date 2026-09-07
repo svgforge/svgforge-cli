@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Removed: `lodash.merge` dependency
+
+* Replace `lodash.merge` with the `deepMerge` helper already used by the
+  svgforge library (`svgforge/lib/svg-sprite/utils/index.js`), removing
+  the last lodash dependency
+
 ### Changed: re-add the `view` mode dimension stylesheet
 
 * Re-introduce the `--view-render-css` flag (and `--view-render-css-template` /
@@ -55,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   from the dependencies; `engines.node` stays `>= 22` (required for the glob
   API introduced in Node 22)
 
-## 1.0.0-alpha — 2024-?
+## 1.0.0-alpha — 2026-09
 
 * Standalone command line interface for svgforge
 * Support for all sprite modes (css, view, defs, symbol, stack) and render
