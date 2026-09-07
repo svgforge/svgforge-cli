@@ -156,6 +156,30 @@ view:
     default: true
     map: mode.view.bust
 
+  render:
+    css:
+      description: Whether to render a CSS stylesheet with shape dimension classes
+      default: false
+      alias: vcss
+
+      template:
+        description: CSS stylesheet Mustache template (relative to svgforge basedir)
+        default: tmpl/common/sprite.css
+        map: mode.view.render.css.template
+
+      dest:
+        description: CSS stylesheet destination (relative to the --view-dest)
+        default: sprite.css
+        map: mode.view.render.css.dest
+
+    "*":
+      description: Custom output renderings
+      template:
+        description: Custom output Mustache template (relative to svgforge basedir)
+
+      dest:
+        description: Custom output destination (relative to the --view-dest)
+
   example:
     description: Whether to render an example HTML document
     default: false

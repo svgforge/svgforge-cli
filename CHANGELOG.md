@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.0 — View `.dims` stylesheet and svgforge 1.1.0
+
+### Removed: `lodash.merge` dependency
+
+* Replace `lodash.merge` with the `deepMerge` helper already used by the
+  svgforge library (`svgforge/lib/svg-sprite/utils/index.js`), removing
+  the last lodash dependency
+
+### Changed: depend on svgforge 1.1.0 and fix the GitHub release step
+
+* Bump the `svgforge` dependency to `^1.1.0` (view-mode `.dims` stylesheet,
+  example-document overhaul and invalid-XML fix)
+* Add `GH_TOKEN` to the release workflow so `gh release create` can publish
+  the GitHub release (it previously failed for svgforge with
+  "select a GitHub user or use GH_TOKEN")
+
+### Changed: re-add the `view` mode dimension stylesheet
+
+* Re-introduce the `--view-render-css` flag (and `--view-render-css-template` /
+  `--view-render-css-dest`) so the `view` mode can render the plain `.dims`
+  size stylesheet (width/height only) — matching the `defs`/`symbol`/`stack`
+  modes. Consumers size an icon by `class="<icon>-dims"` without knowing its
+  dimensions.
+* Fix a bug that made the CLI build **all** four modes on every run: yargs
+  populates every mode flag with `default: false`, so `Object.hasOwn(argv, mode)`
+  was true for all modes. Mode activation now checks the flag truthiness instead,
+  so only the explicitly requested modes are built.
+
+### Documentation
+
+* Link the svgforge configuration documentation and point to the DeepWiki
+  page instead of the online configurator
+* Mark the `defs` sprite mode as legacy in the modes table
+
 ## 1.0.1 — Drop remaining lodash/async dependencies
 
 * Bump the `svgforge` dependency to `^1.0.1` (native promise-based helpers,
@@ -41,7 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   from the dependencies; `engines.node` stays `>= 22` (required for the glob
   API introduced in Node 22)
 
-## 1.0.0-alpha — 2024-?
+## 1.0.0-alpha — 2026-09
 
 * Standalone command line interface for svgforge
 * Support for all sprite modes (css, view, defs, symbol, stack) and render

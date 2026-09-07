@@ -1,6 +1,10 @@
 {
   "name": "svgforge-cli",
-  "version": "1.0.1",
+  "version": "1.1.0",
+  "author": "Felix Müller (https://github.com/joeda1)",
+  "contributors": [
+    "Joschi Kuphal <joschi@kuphal.net> (https://github.com/jkphl)"
+  ],
   "description": "Command line interface for svgforge — create SVG sprites & stacks with stylesheet resources (CSS, Sass, etc.)",
   "homepage": "https://github.com/svgforge/svgforge-cli",
   "repository": {
@@ -19,10 +23,6 @@
     "command-line"
   ],
   "license": "MIT",
-  "author": "Felix Müller",
-  "contributors": [
-    "Joschi Kuphal <joschi@kuphal.net> (https://github.com/jkphl)"
-  ],
   "type": "module",
   "engines": {
     "node": ">=24"
@@ -42,8 +42,7 @@
   },
   "dependencies": {
     "js-yaml": "^5.4.1",
-    "lodash.merge": "^4.6.2",
-    "svgforge": "^1.0.1",
+    "svgforge": "^1.1.0",
     "vinyl": "^3.0.1",
     "yargs": "^18.1.0"
   },
