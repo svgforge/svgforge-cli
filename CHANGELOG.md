@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   was true for all modes. Mode activation now checks the flag truthiness instead,
   so only the explicitly requested modes are built.
 
+### Documentation
+
+* Link the svgforge configuration documentation and point to the DeepWiki
+  page instead of the online configurator
+* Mark the `defs` sprite mode as legacy in the modes table
+
 ## 1.0.1 — Drop remaining lodash/async dependencies
 
 * Bump the `svgforge` dependency to `^1.0.1` (native promise-based helpers,
