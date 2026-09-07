@@ -12,8 +12,8 @@ importers:
         specifier: ^5.4.1
         version: 5.4.1
       svgforge:
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.1.0
+        version: 1.1.0
       vinyl:
         specifier: ^3.0.1
         version: 3.0.1
@@ -1827,8 +1827,8 @@ packages:
     resolution: {integrity: sha512-ZW2OvfeCXrNTbLakPUzjQG922EeGCOteFSVoek5DKStTh898wf7zgtuFlzQN8HfZCxC3Eh02yJVrRW51hADf+w==}
     engines: {node: '>=20'}
 
-  svgforge@1.0.1:
-    resolution: {integrity: sha512-YOZQBPtHsnfE01gd4qfoFvUpXBKRB+1/TJdW0dxSQIm6QO/eYa6nP6Omt6rHxyhP6nZlMBaKvpHSziQ5L9lz4Q==}
+  svgforge@1.1.0:
+    resolution: {integrity: sha512-6Et502ejZjEicZsewZg3L/1ddGBcw7K6u683pSphccd1J3G41ZuvqN/OsBNAjY35rqbQmjRsm7XCyYzXQYq6Jw==}
     engines: {node: '>=24'}
 
   svgo@4.1.0:
@@ -3965,7 +3965,7 @@ snapshots:
       has-flag: 5.0.1
       supports-color: 10.2.2
 
-  svgforge@1.0.1:
+  svgforge@1.1.0:
     dependencies:
       '@resvg/resvg-js': 2.6.2
       '@xmldom/xmldom': 0.9.12

@@ -5,13 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 1.1.0 — View `.dims` stylesheet and svgforge 1.1.0
 
 ### Removed: `lodash.merge` dependency
 
 * Replace `lodash.merge` with the `deepMerge` helper already used by the
   svgforge library (`svgforge/lib/svg-sprite/utils/index.js`), removing
   the last lodash dependency
+
+### Changed: depend on svgforge 1.1.0 and fix the GitHub release step
+
+* Bump the `svgforge` dependency to `^1.1.0` (view-mode `.dims` stylesheet,
+  example-document overhaul and invalid-XML fix)
+* Add `GH_TOKEN` to the release workflow so `gh release create` can publish
+  the GitHub release (it previously failed for svgforge with
+  "select a GitHub user or use GH_TOKEN")
 
 ### Changed: re-add the `view` mode dimension stylesheet
 

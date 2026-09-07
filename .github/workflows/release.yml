@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Clone repository
         uses: actions/checkout@v7
