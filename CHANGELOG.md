@@ -5,17 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 2.0.0 — Scoped package names
 
-### Changed: Scoped package name
+### Breaking: Scoped package name
 
 * The package is now published as **`@svgforge/svgforge-cli`** on both
   [npmjs](https://www.npmjs.com/package/@svgforge/svgforge-cli) and
   [GitHub Packages](https://github.com/svgforge/svgforge-cli/pkgs/npm/svgforge-cli)
   (GitHub's package registry requires scoped package names). Install with
   `npm install --global @svgforge/svgforge-cli`.
-* The old unscoped `svgforge-cli` package name on npmjs is deprecated and no
-  longer receives updates.
+* **Upgrade path from 1.x:** the unscoped `svgforge-cli` package is deprecated
+  and no longer receives updates. Existing installs must reinstall
+  `@svgforge/svgforge-cli@^2.0.0` and use the `svgforge` command, which now
+  depends on the scoped `@svgforge/svgforge` library.
 * Depend on `@svgforge/svgforge` (scoped) instead of `svgforge`.
 
 ### Changed: Examples use the modern «symbol» mode
