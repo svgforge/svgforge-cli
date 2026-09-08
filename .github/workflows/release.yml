@@ -12,6 +12,7 @@ env:
 
 permissions:
   contents: write
+  packages: write # Publish to GitHub Packages
 
 jobs:
   publish:
@@ -49,6 +50,14 @@ jobs:
 
       - name: Publish to npm
         run: pnpm publish --no-git-checks --access public
+
+      - name: Configure GitHub Packages authentication
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${GH_TOKEN}" >> ~/.npmrc
+          echo "@svgforge:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+      - name: Publish to GitHub Packages
+        run: pnpm publish --no-git-checks --access public --registry=https://npm.pkg.github.com
 
       - name: Create GitHub release
         run: gh release create "$GITHUB_REF_NAME" --generate-notes

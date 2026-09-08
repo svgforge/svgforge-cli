@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Changed: Scoped package name
+
+* The package is now published as **`@svgforge/svgforge-cli`** on both
+  [npmjs](https://www.npmjs.com/package/@svgforge/svgforge-cli) and
+  [GitHub Packages](https://github.com/svgforge/svgforge-cli/pkgs/npm/svgforge-cli)
+  (GitHub's package registry requires scoped package names). Install with
+  `npm install --global @svgforge/svgforge-cli`.
+* The old unscoped `svgforge-cli` package name on npmjs is deprecated and no
+  longer receives updates.
+* Depend on `@svgforge/svgforge` (scoped) instead of `svgforge`.
+
 ## 1.1.0 — View `.dims` stylesheet and svgforge 1.1.0
 
 ### Removed: `lodash.merge` dependency
