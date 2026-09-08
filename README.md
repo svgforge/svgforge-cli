@@ -1,4 +1,4 @@
-# svgforge-cli
+# @svgforge/svgforge-cli
 
 [![npm version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![npm downloads][npm-downloads]][npm-url]
 
@@ -11,13 +11,13 @@ The configuration options are [documented in the svgforge](https://github.com/sv
 Install globally to use `svgforge` anywhere:
 
 ```bash
-npm install --global svgforge-cli
+npm install --global @svgforge/svgforge-cli
 ```
 
 Or as a project dependency (e.g. for usage in npm scripts):
 
 ```bash
-npm install --save-dev svgforge-cli
+npm install --save-dev @svgforge/svgforge-cli
 ```
 
 ## Usage
@@ -36,10 +36,10 @@ Create a `view` sprite of all SVG files in `assets/` and write the result — al
 svgforge --view --view-example --view-bust=false --dest=out assets/*.svg
 ```
 
-Create a `defs` sprite with an accompanying CSS stylesheet and example document:
+Create a `symbol` sprite with an accompanying CSS stylesheet and example document:
 
 ```bash
-svgforge --defs --defs-render-css --defs-example --dest=out assets/*.svg
+svgforge --symbol --symbol-render-css --symbol-example --dest=out assets/*.svg
 ```
 
 Add a 10px padding around all shapes of a `stack` sprite:
@@ -63,9 +63,9 @@ The CLI supports all four sprite modes of svgforge. Activate them individually o
 | Mode | Flag | Description |
 | ---- | ---- | ----------- |
 | `view` | `--view` / `-v` | SVG view-based sprite |
-| `defs` | `--defs` / `-d` | Sprite of `<defs>` elements (legacy) |
 | `symbol` | `--symbol` / `-s` | Sprite of `<symbol>` elements for inline embedding |
 | `stack` | `--stack` / `-S` | Stacked sprite with `:target` CSS |
+| `defs` | `--defs` / `-d` | Sprite of `<defs>` elements (legacy) |
 
 ### Advanced globbing
 
@@ -103,11 +103,11 @@ The test suite spawns the CLI as a child process against fixtures in `test/fixtu
 ## License
 
 [MIT](LICENSE) © Felix Müller
+[npm-url]: https://www.npmjs.com/package/@svgforge/svgforge-cli
 
-[npm-url]: https://www.npmjs.com/package/svgforge-cli
-[npm-image]: https://img.shields.io/npm/v/svgforge-cli?logo=npm&logoColor=fff
-[npm-downloads]: https://img.shields.io/npm/dm/svgforge-cli
+[npm-image]: https://img.shields.io/npm/v/@svgforge/svgforge-cli?logo=npm&logoColor=fff
 
+[npm-downloads]: https://img.shields.io/npm/dm/@svgforge/svgforge-cli
 [ci-url]: https://github.com/svgforge/svgforge-cli/actions/workflows/test.yml?query=branch%3Amain
 [ci-image]: https://img.shields.io/github/actions/workflow/status/svgforge/svgforge-cli/test.yml?branch=main&label=CI&logo=github
 

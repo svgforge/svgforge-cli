@@ -20,8 +20,8 @@ import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 import {load} from 'js-yaml';
 import yargs from 'yargs';
-import SVGSpriter from 'svgforge';
-import {deepMerge, isObject, zipObject} from 'svgforge/lib/svg-sprite/utils/index.js';
+import SVGSpriter from '@svgforge/svgforge';
+import {deepMerge, isObject, zipObject} from '@svgforge/svgforge/lib/svg-sprite/utils/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const {version} = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'package.json'), 'utf8'));
@@ -110,7 +110,7 @@ const optionsMap = {};
  @returns {string} Resolved absolute path
  */
 function resolveSvgForgePath(target) {
-  const libEntry = fileURLToPath(import.meta.resolve('svgforge'));
+  const libEntry = fileURLToPath(import.meta.resolve('@svgforge/svgforge'));
   const libRoot = path.dirname(path.dirname(libEntry));
   return path.resolve(libRoot, target);
 }

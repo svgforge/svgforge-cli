@@ -110,10 +110,10 @@ Create a `view` sprite of the SVG files found in the directory `"assets"` and wr
 svgforge --view --view-example --dest=out assets/*.svg
 ```
 
-Create a `defs` sprite with a CSS stylesheet and an example document:
+Create a `symbol` sprite with a CSS stylesheet and an example document:
 
 ```bash
-svgforge --defs --defs-render-css --defs-example --dest=out assets/*.svg
+svgforge --symbol --symbol-render-css --symbol-example --dest=out assets/*.svg
 ```
 
 The next one creates a `stack` sprite and adds a 10px padding around all shapes:

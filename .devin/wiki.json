@@ -1,0 +1,193 @@
+{
+  "repo_notes": [
+    {
+      "content": ""
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "What svgforge-cli is, its relationship to the svgforge library, repo layout, and links to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Getting Started",
+      "purpose": "Installation (global/local), Node 24 + pnpm requirements, first sprite generation, scripts.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Version History and Migration",
+      "purpose": "Rebrand from svg-sprite-cli, removed css sprite mode and view render options, dependency purges.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "CLI Architecture",
+      "purpose": "Overview of the bin/svgforge.js entrypoint pipeline and the declarative option schema; links to children.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Option Registration and config.yaml Schema",
+      "purpose": "How bin/config.yaml declares options, aliases, defaults and `map` config paths, and how addOption/registerOptions build the yargs parser.",
+      "parent": "CLI Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Configuration Assembly and Refinement",
+      "purpose": "applyCliOptions, loadExternalConfig (--config JSON), refineShapeConfig, refineSpriteModes, removeExcessiveExamples, loadVariables.",
+      "parent": "CLI Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "File Ingestion, Compilation and Output",
+      "purpose": "Glob resolution with fs.globSync, shape ID derivation from paths, spriter.add, compile(), and recursive vinyl writeFiles.",
+      "parent": "CLI Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Sprite Modes and Rendering",
+      "purpose": "Overview of view/defs/symbol/stack modes and stylesheet/example rendering; links to detail pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Command-Line Reference",
+      "purpose": "Complete flag documentation from docs/command-line.md and config.yaml, grouped by shape/svg/mode sections.",
+      "parent": "Sprite Modes and Rendering",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Shape Processing: IDs, Dimensions, Transforms",
+      "purpose": "Shape ID generation/separators, padding & box sizing, meta/align YAML, svgo transform config.",
+      "parent": "Sprite Modes and Rendering",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Templates and Example Documents",
+      "purpose": "Mustache templates for CSS/HTML output, template variables, and generated example docs.",
+      "parent": "Sprite Modes and Rendering",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Testing",
+      "purpose": "Overview of the integration-style test suite run with node --test; links to children.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "CLI Test Suite and Helpers",
+      "purpose": "test/cli.test.js structure, execCli/makeTemporaryDir helpers, assertions on output files.",
+      "parent": "Testing",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Fixtures Catalog",
+      "purpose": "Inventory of test/fixtures SVGs and config files and what edge cases each covers (pseudo-class, whitespace, nested, doctype, refs).",
+      "parent": "Testing",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Development and Infrastructure",
+      "purpose": "Overview of tooling, dependency management and CI/CD; links to children.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Dependency and Package Management",
+      "purpose": "package.json metadata, pnpm workspace policies, lockfile structure, gitignored artifacts.",
+      "parent": "Development and Infrastructure",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Linting and Code Style",
+      "purpose": "xo.config.js rules, eslint-plugin-jsdoc, lint/fix scripts and enforced conventions.",
+      "parent": "Development and Infrastructure",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "CI/CD Workflows",
+      "purpose": "test.yml, lint.yml, codeql.yml, release.yml, auto-assign.yml triggers and pipelines.",
+      "parent": "Development and Infrastructure",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Glossary",
+      "purpose": "Definitions of sprite modes, shape IDs, vinyl files, render types, spriter config, xo, and other project jargon with code pointers.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    }
+  ]
+}
