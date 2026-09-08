@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   longer receives updates.
 * Depend on `@svgforge/svgforge` (scoped) instead of `svgforge`.
 
+### Changed: Examples use the modern «symbol» mode
+
+* The command-line examples (README, `docs/command-line.md`) now demonstrate
+  the «symbol» mode instead of the legacy «defs» mode. The «defs» mode itself
+  stays supported.
+
 ## 1.1.0 — View `.dims` stylesheet and svgforge 1.1.0
 
 ### Removed: `lodash.merge` dependency

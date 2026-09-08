@@ -36,10 +36,10 @@ Create a `view` sprite of all SVG files in `assets/` and write the result — al
 svgforge --view --view-example --view-bust=false --dest=out assets/*.svg
 ```
 
-Create a `defs` sprite with an accompanying CSS stylesheet and example document:
+Create a `symbol` sprite with an accompanying CSS stylesheet and example document:
 
 ```bash
-svgforge --defs --defs-render-css --defs-example --dest=out assets/*.svg
+svgforge --symbol --symbol-render-css --symbol-example --dest=out assets/*.svg
 ```
 
 Add a 10px padding around all shapes of a `stack` sprite:
@@ -63,9 +63,9 @@ The CLI supports all four sprite modes of svgforge. Activate them individually o
 | Mode | Flag | Description |
 | ---- | ---- | ----------- |
 | `view` | `--view` / `-v` | SVG view-based sprite |
-| `defs` | `--defs` / `-d` | Sprite of `<defs>` elements (legacy) |
 | `symbol` | `--symbol` / `-s` | Sprite of `<symbol>` elements for inline embedding |
 | `stack` | `--stack` / `-S` | Stacked sprite with `:target` CSS |
+| `defs` | `--defs` / `-d` | Sprite of `<defs>` elements (legacy) |
 
 ### Advanced globbing
 
