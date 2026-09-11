@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@svgforge/svgforge':
         specifier: ^2.0.0
-        version: 2.0.0
+        version: 2.0.1
       js-yaml:
         specifier: ^5.4.1
         version: 5.4.1
@@ -330,8 +330,8 @@ packages:
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
 
-  '@svgforge/svgforge@2.0.0':
-    resolution: {integrity: sha512-5aZkU1TxrJDeFJazQf6AeTNpL+Y22/JHrnWV/CnHtLVSfNPVB7e8MFEt6IGEZbmzAgsPeiJ7d29RNt+wmt+6pg==}
+  '@svgforge/svgforge@2.0.1':
+    resolution: {integrity: sha512-XhNLw0PIGNi/7uotMdT8AWSqQwwwalMhPDCN1c+F5559ahaPTkPIhOnYdgcs4idmykei4agiLDE5fucnV2ZuGA==}
     engines: {node: '>=24'}
 
   '@tybys/wasm-util@0.10.3':
@@ -2372,7 +2372,7 @@ snapshots:
       estraverse: 5.3.0
       picomatch: 4.0.7
 
-  '@svgforge/svgforge@2.0.0':
+  '@svgforge/svgforge@2.0.1':
     dependencies:
       '@resvg/resvg-js': 2.6.2
       '@xmldom/xmldom': 0.9.12
