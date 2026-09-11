@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+# Kernregel (AGENTS.md): niemals einen lokalen link:-Override committen.
+# Lokaler Dev-Zustand: ./set-dev.sh true — vor dem Commit: ./set-dev.sh false.
+# Dieser Guard prüft den Staging-Bereich, nicht den Arbeitsbaum.
+
+files="pnpm-workspace.yaml pnpm-lock.yaml"
+offenders=""
+
+for f in $files; do
+  if git show ":$f" 2>/dev/null | grep -q 'link:'; then
+    offenders="$offenders $f"
+  fi
+done
+
+if [ -n "$offenders" ]; then
+  echo "✗ Commit abgebrochen: link:-Override in:$offenders" >&2
+  echo "  (Kernregel, AGENTS.md — verunreinigt CI und die Registry-Lockfile)" >&2
+  echo "  → ./set-dev.sh false ausführen, erneut adden und committen." >&2
+  exit 1
+fi

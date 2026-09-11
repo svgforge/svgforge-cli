@@ -36,6 +36,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Reject local link: overrides (Kernregel)
+        run: |
+          if grep -R "link:" pnpm-workspace.yaml pnpm-lock.yaml 2>/dev/null; then
+            echo "::error::pnpm-workspace.yaml/pnpm-lock.yaml contain a local link: override. Run ./set-dev.sh false before committing." >&2
+            exit 1
+          fi
+          echo "No link: override found — lockfile resolves from the registry."
+
       - name: Run tests with coverage
         run: npm run test:coverage
 

@@ -24,6 +24,9 @@ importers:
       eslint-plugin-jsdoc:
         specifier: ^64.3.2
         version: 64.3.6(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
       xo:
         specifier: ^4.0.0
         version: 4.0.0(@types/eslint@9.6.1)(@typescript-eslint/utils@8.70.0(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
@@ -1215,6 +1218,11 @@ packages:
   human-signals@8.0.1:
     resolution: {integrity: sha512-eKCa6bwnJhvxj14kZk5NCPc6Hb6BdsU9DZcOnmQKSnO1VKrfV0zCvtttPZUsBvjmNDn8rpcJfpwSYnHBjc95MQ==}
     engines: {node: '>=18.18.0'}
+
+  husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   identifier-regex@1.1.0:
     resolution: {integrity: sha512-SLX4H/vtcYlYnL7XqnuJKHU7Z8517TgsW9nmQiGOgMCjQ8V/deLYu6bEmbGoXe7WMMhc9+EUGyFFneHja8KabA==}
@@ -3289,6 +3297,8 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.14
 
   human-signals@8.0.1: {}
+
+  husky@9.1.7: {}
 
   identifier-regex@1.1.0:
     dependencies:
