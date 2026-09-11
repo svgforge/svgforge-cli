@@ -34,6 +34,7 @@
     "bin"
   ],
   "scripts": {
+    "prepare": "husky",
     "lint": "xo",
     "fix": "xo --fix",
     "test": "node --test test/*.test.js",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "eslint-plugin-jsdoc": "^64.3.2",
+    "husky": "^9.1.7",
     "xo": "^4.0.0"
   }
 }
