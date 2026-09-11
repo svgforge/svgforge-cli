@@ -70,8 +70,8 @@ jobs:
             flag {print}
           ' CHANGELOG.md > "$NOTES_FILE"
           if [ -s "$NOTES_FILE" ]; then
-            gh release create "$GITHUB_REF_NAME" --notes-file "$NOTES_FILE"
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file "$NOTES_FILE"
           else
             echo "No CHANGELOG section for v$VERSION — using generated notes." >&2
-            gh release create "$GITHUB_REF_NAME" --generate-notes
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes
           fi
