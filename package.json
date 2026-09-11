@@ -27,7 +27,6 @@
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@11.25.0",
   "bin": {
     "svgforge": "./bin/svgforge.js"
   },

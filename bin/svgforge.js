@@ -472,6 +472,40 @@ function loadVariables(cfg) {
 }
 
 /**
+ Resolve the output directories that must not be re-ingested as source files
+
+ Generated artifacts (sprites, stylesheets, examples) live inside the configured
+ destination tree. When an input glob covers that tree (e.g. a recursive
+ SVG glob), a sprite written by a previous run would otherwise be fed back
+ in as a shape with an id derived from its output path (e.g.
+ "assets--OUT--stack--svg--sprite").
+
+ @param {SpriterConfig} cfg Spriter configuration
+ @returns {string[]} Absolute output root directories to exclude from the input
+ */
+function getExcludedInputRoots(cfg) {
+  const destRoot = path.resolve(cfg.dest || '.');
+  const roots = new Set([destRoot]);
+
+  // When the destination defaults to the current directory every glob would
+  // land inside it, so restrict the exclusion to the mode specific output
+  // directories instead.
+  if (destRoot === process.cwd()) {
+    roots.clear();
+
+    for (const mode of MODES) {
+      const modeDest = cfg.mode?.[mode]?.dest;
+
+      if (modeDest) {
+        roots.add(path.resolve(destRoot, modeDest));
+      }
+    }
+  }
+
+  return [...roots];
+}
+
+/**
  Run the command line interface
 
  @returns {Promise<void>} Promise resolving after all sprites were written
@@ -494,13 +528,21 @@ async function main() {
 
   const spriter = new SVGSpriter(config);
   const files = argv._.flatMap(filePattern => fs.globSync(filePattern).toSorted((a, b) => b.localeCompare(a)));
+  const excludedInputRoots = getExcludedInputRoots(config);
 
   for (const filePattern of files) {
+    const file = path.resolve(filePattern);
+
+    // Skip files inside the output tree so previously generated artifacts are
+    // not processed as source shapes again
+    if (excludedInputRoots.some(root => file === root || file.startsWith(root + path.sep))) {
+      continue;
+    }
+
     // Glob >= 9 returns paths without the "./" prefix, so detect relative
     // patterns from the original glob result to preserve directory structure
     // in the shape identifiers (e.g. "nested/leaf.svg" -> "nested--leaf")
     const isRelative = !path.isAbsolute(filePattern) && !filePattern.startsWith('../');
-    const file = path.resolve(filePattern);
     const stat = fs.lstatSync(file);
     let basename;
 
