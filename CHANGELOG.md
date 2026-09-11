@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.1 — Do not re-ingest the output destination
+
+### Fixed: previously generated artifacts are no longer used as source shapes
+
+* On repeated runs with a recursive input glob, the CLI used to pick up its
+  own previously generated sprites and stylesheets from the configured
+  destination directory and process them as source shapes, producing shapes
+  with identifiers derived from the output path (e.g. `assets--OUT--stack--
+  svg--sprite`). The destination tree (and the mode-specific output
+  directories when the destination is the current directory) is now filtered
+  out of the glob results.
+
 ## 2.0.0 — Scoped package names
 
 ### Breaking: Scoped package name

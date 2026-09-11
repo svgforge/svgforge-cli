@@ -103,6 +103,7 @@ The test suite spawns the CLI as a child process against fixtures in `test/fixtu
 ## License
 
 [MIT](LICENSE) © Felix Müller
+
 [npm-url]: https://www.npmjs.com/package/@svgforge/svgforge-cli
 
 [npm-image]: https://img.shields.io/npm/v/@svgforge/svgforge-cli?logo=npm&logoColor=fff

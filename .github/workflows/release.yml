@@ -30,6 +30,7 @@ jobs:
       - name: Install pnpm and Node.js
         uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
         with:
+          version: 12
           runtime: node@${{ env.NODE }}
           cache: true
 
@@ -60,4 +61,17 @@ jobs:
         run: pnpm publish --no-git-checks --access public --registry=https://npm.pkg.github.com
 
       - name: Create GitHub release
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          NOTES_FILE="release-notes.md"
+          awk -v ver="$VERSION" '
+            $0 ~ "^## " ver " " {flag = 1; print; next}
+            flag && /^## / {exit}
+            flag {print}
+          ' CHANGELOG.md > "$NOTES_FILE"
+          if [ -s "$NOTES_FILE" ]; then
+            gh release create "$GITHUB_REF_NAME" --notes-file "$NOTES_FILE"
+          else
+            echo "No CHANGELOG section for v$VERSION — using generated notes." >&2
+            gh release create "$GITHUB_REF_NAME" --generate-notes
+          fi
