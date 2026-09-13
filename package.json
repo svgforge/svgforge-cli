@@ -2,9 +2,6 @@
   "name": "@svgforge/svgforge-cli",
   "version": "2.0.1",
   "author": "Felix Müller (https://github.com/joeda1)",
-  "contributors": [
-    "Joschi Kuphal <joschi@kuphal.net> (https://github.com/jkphl)"
-  ],
   "description": "Command line interface for svgforge — create SVG sprites & stacks with stylesheet resources (CSS, Sass, etc.)",
   "homepage": "https://github.com/svgforge/svgforge-cli",
   "repository": {

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed: the `./` base directory marker works again
+
+* The documentation promises that a literal `./` segment in an input glob
+  (e.g. `assets/./**/*.svg`) marks the base directory from which shape ID
+  traversal starts, yielding IDs like `path--to--source`. Since the switch to
+  `fs.globSync` (and glob >= 9 in general), the `./` was stripped from the
+  glob results, so the base directory name leaked into the shape IDs
+  (`assets--path--to--source`). The marker is now detected on the original
+  pattern instead and the marked base directory is removed from the shape IDs.
+
 ## 2.0.1 — Do not re-ingest the output destination
 
 ### Fixed: previously generated artifacts are no longer used as source shapes

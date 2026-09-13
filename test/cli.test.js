@@ -259,6 +259,17 @@ describe('svgforge-cli', () => {
       });
     });
 
+    it('strips the "./" base directory marker from shape IDs', async () => {
+      await withTemporaryDir(async dir => {
+        const dest = path.join(dir, 'out');
+        await execCli(['--symbol', `--dest=${dest}`, 'nested/./**/*.svg'], {cwd: fixtureDir});
+
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        assert.match(sprite, /id="leaf"/u);
+        assert.doesNotMatch(sprite, /id="nested--leaf"/u);
+      });
+    });
+
     it('applies a custom shape ID separator', async () => {
       await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
