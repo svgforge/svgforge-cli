@@ -3,15 +3,13 @@
 /**
  Svgforge is a Node.js module for creating SVG sprites
 
- Based on the command line interface originally written for svg-sprite
+ Some code based on the command line interface originally written for svg-sprite
  by Joschi Kuphal — this is a standalone fork/package of that CLI.
 
- @see https://github.com/joeda1/svgforge-cli
- @author Joschi Kuphal <joschi@kuphal.net> (https://github.com/jkphl)
- @author Felix Müller
- @copyright © 2018 Joschi Kuphal
+ @see https://github.com/svgforge/svgforge-cli
+ @author Felix Müller (https://github.com/joeda1)
  @copyright © 2026 Felix Müller
- @license MIT https://github.com/joeda1/svgforge-cli/blob/main/LICENSE
+ @license MIT https://github.com/svgforge/svgforge-cli/blob/main/LICENSE
  */
 
 import fs from 'node:fs';
@@ -527,10 +525,22 @@ async function main() {
   loadVariables(config);
 
   const spriter = new SVGSpriter(config);
-  const files = argv._.flatMap(filePattern => fs.globSync(filePattern).toSorted((a, b) => b.localeCompare(a)));
+
+  // Glob (>= 9, incl. fs.globSync) returns paths without the "./" segment, so
+  // the base directory marker has to be detected on the original pattern. A
+  // literal "/./" segment marks the directory from which shape ID traversal
+  // should start (e.g. "assets/./**/*.svg" yields "path--to--source" instead
+  // of "assets--path--to--source").
+  const matchedFiles = argv._.flatMap(pattern => {
+    const marker = pattern.lastIndexOf('./');
+    const baseDepth = marker === -1 ? 0 : pattern.slice(0, marker).split('/').filter(Boolean).length;
+    return fs.globSync(pattern)
+      .toSorted((a, b) => b.localeCompare(a))
+      .map(file => ({baseDepth, file}));
+  });
   const excludedInputRoots = getExcludedInputRoots(config);
 
-  for (const filePattern of files) {
+  for (const {baseDepth, file: filePattern} of matchedFiles) {
     const file = path.resolve(filePattern);
 
     // Skip files inside the output tree so previously generated artifacts are
@@ -539,15 +549,17 @@ async function main() {
       continue;
     }
 
-    // Glob >= 9 returns paths without the "./" prefix, so detect relative
-    // patterns from the original glob result to preserve directory structure
-    // in the shape identifiers (e.g. "nested/leaf.svg" -> "nested--leaf")
+    // Detect relative patterns to preserve directory structure in the shape
+    // identifiers (e.g. "nested/leaf.svg" -> "nested--leaf")
     const isRelative = !path.isAbsolute(filePattern) && !filePattern.startsWith('../');
     const stat = fs.lstatSync(file);
     let basename;
 
     if (stat.isSymbolicLink()) {
       basename = path.basename(fs.readlinkSync(file));
+    } else if (baseDepth > 0) {
+      // Strip the base directory marked by "/./" from the shape identifier
+      basename = filePattern.split('/').filter(Boolean).slice(baseDepth).join('/');
     } else {
       basename = isRelative ? filePattern : path.basename(file);
     }
