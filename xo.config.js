@@ -10,7 +10,7 @@ const xoConfig = [
       // Project-specific jsdoc additions on top of xo defaults.
       'require-unicode-regexp': ['error', {requireFlag: 'u'}],
       'jsdoc/no-undefined-types': ['error', {definedTypes: ['SVGSpriter', 'File', 'SVGShape', 'SVGSprite', 'playwright', 'HTMLElement', 'Yargs']}],
-      'jsdoc/check-values': ['error', {allowedLicenses: ['MIT https://github.com/joeda1/svgforge-cli/blob/main/LICENSE']}],
+      'jsdoc/check-values': ['error', {allowedLicenses: ['MIT https://github.com/svgforge/svgforge-cli/blob/main/LICENSE']}],
     },
   },
   {
