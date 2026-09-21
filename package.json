@@ -1,7 +1,7 @@
 {
   "name": "@svgforge/svgforge-cli",
-  "version": "2.0.1",
-  "author": "Felix Müller (https://github.com/joeda1)",
+  "version": "2.1.0",
+  "author": "svgforge (https://github.com/SpotlightOn)",
   "description": "Command line interface for svgforge — create SVG sprites & stacks with stylesheet resources (CSS, Sass, etc.)",
   "homepage": "https://github.com/svgforge/svgforge-cli",
   "repository": {
@@ -38,14 +38,14 @@
     "test:coverage": "mkdir -p coverage && node --test --experimental-test-coverage --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info"
   },
   "dependencies": {
-    "@svgforge/svgforge": "^2.0.0",
-    "js-yaml": "^5.4.1",
+    "@svgforge/svgforge": "^2.1.0",
+    "js-yaml": "^5.4.2",
     "vinyl": "^3.0.1",
     "yargs": "^18.1.0"
   },
   "devDependencies": {
-    "eslint-plugin-jsdoc": "^64.3.2",
+    "eslint-plugin-jsdoc": "^64.5.4",
     "husky": "^9.1.7",
-    "xo": "^4.0.0"
+    "xo": "^5.0.1"
   }
 }

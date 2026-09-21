@@ -6,6 +6,8 @@
 
 The configuration options are [documented in the svgforge](https://github.com/svgforge/svgforge/blob/main/docs/configuration.md) library.
 
+There is a Github page with [some tutorials](https://svgforge.github.io).
+
 ## Installation
 
 Install globally to use `svgforge` anywhere:
@@ -102,7 +104,7 @@ The test suite spawns the CLI as a child process against fixtures in `test/fixtu
 
 ## License
 
-[MIT](LICENSE) © Felix Müller
+[MIT](LICENSE) © svgforge
 
 [npm-url]: https://www.npmjs.com/package/@svgforge/svgforge-cli
 

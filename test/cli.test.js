@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {describe, it} from 'node:test';
+// eslint-disable-next-line node-test/no-import-test-files -- helpers.js is a test utility, not a test file
 import {execCli, makeTemporaryDir} from './helpers.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

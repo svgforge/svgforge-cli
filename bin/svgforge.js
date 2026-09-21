@@ -7,8 +7,8 @@
  by Joschi Kuphal — this is a standalone fork/package of that CLI.
 
  @see https://github.com/svgforge/svgforge-cli
- @author Felix Müller (https://github.com/joeda1)
- @copyright © 2026 Felix Müller
+ @author svgforge (https://github.com/SpotlightOn)
+ @copyright © 2026 svgforge
  @license MIT https://github.com/svgforge/svgforge-cli/blob/main/LICENSE
  */
 
@@ -42,8 +42,11 @@ const RENDER_TYPES = ['css'];
  Yargs argument parser instance
  */
 
-// eslint-disable-next-line jsdoc/imports-as-dependencies -- `yargs` is a declared dependency; dynamic import() is required in JSDoc types.
-/** @typedef {import('yargs').Argv} Yargs */
+/* eslint-disable jsdoc/imports-as-dependencies -- yargs is in dependencies but the rule fails to detect it */
+/**
+@typedef {import('yargs').Argv} Yargs
+*/
+/* eslint-enable jsdoc/imports-as-dependencies */
 
 /**
  CLI option definition (subset of the bundled YAML configuration)
@@ -291,7 +294,9 @@ function loadExternalConfig(cfg, argv) {
     delete argv.C;
 
     const JSONConfigContent = fs.readFileSync(path.resolve(configFile));
-    /** @type {SpriterConfig} */
+    /**
+    @type {SpriterConfig}
+    */
     const externalConfig = JSON.parse(JSONConfigContent);
 
     // Keep an un-merged clone for the later option-removal checks
@@ -363,27 +368,30 @@ function refineShapeConfig(cfg, argv) {
   }
 
   // Expand transformation options
-  if (typeof cfg.shape.transform === 'string') {
-    const transforms = String(cfg.shape.transform).trim();
-    cfg.shape.transform = [];
+  if (typeof cfg.shape.transform !== 'string') {
+    return;
+  }
 
-    if (transforms.length > 0) {
-      for (const raw of transforms.split(',')) {
-        const transform = String(raw).trim();
-        if (transform.length === 0) {
-          continue;
-        }
+  const transforms = String(cfg.shape.transform).trim();
+  cfg.shape.transform = [];
 
-        if (Object.hasOwn(argv, `shape-transform-${transform}`)) {
-          const transformConfig = readTransformConfig(argv[`shape-transform-${transform}`]);
-          // eslint-disable-next-line max-depth -- Per-transform config lookup nests the mode/shape refinement walk one level too deep.
-          if (transformConfig !== undefined) {
-            cfg.shape.transform.push(zipObject([transform], [transformConfig]));
-          }
-        } else {
-          cfg.shape.transform.push(transform);
-        }
+  if (transforms.length === 0) {
+    return;
+  }
+
+  for (const raw of transforms.split(',')) {
+    const transform = String(raw).trim();
+    if (transform.length === 0) {
+      continue;
+    }
+
+    if (Object.hasOwn(argv, `shape-transform-${transform}`)) {
+      const transformConfig = readTransformConfig(argv[`shape-transform-${transform}`]);
+      if (transformConfig !== undefined) {
+        cfg.shape.transform.push(zipObject([transform], [transformConfig]));
       }
+    } else {
+      cfg.shape.transform.push(transform);
     }
   }
 }
@@ -406,18 +414,24 @@ function refineSpriteModes(cfg, argv) {
     const {render} = cfg.mode[mode];
 
     // Remove excessive render types
-    if (render) {
-      for (const renderType of RENDER_TYPES) {
-        const arg = `${mode}-render-${renderType}`;
-        if (
-          Object.hasOwn(render, renderType)
-          && argv[arg] !== true
-          && (!Object.hasOwn(JSONConfig.mode, mode)
-            || !Object.hasOwn(JSONConfig.mode[mode], 'render')
-            || !Object.hasOwn(JSONConfig.mode[mode].render, renderType))
-        ) {
-          delete render[renderType];
-        }
+    if (!render) {
+      if (Array.isArray(cfg.mode[mode].dimensions) && cfg.mode[mode].dimensions.length === 0) {
+        cfg.mode[mode].dimensions = true;
+      }
+
+      continue;
+    }
+
+    for (const renderType of RENDER_TYPES) {
+      const arg = `${mode}-render-${renderType}`;
+      if (
+        Object.hasOwn(render, renderType)
+        && argv[arg] !== true
+        && (!Object.hasOwn(JSONConfig.mode, mode)
+          || !Object.hasOwn(JSONConfig.mode[mode], 'render')
+          || !Object.hasOwn(JSONConfig.mode[mode].render, renderType))
+      ) {
+        delete render[renderType];
       }
     }
 
@@ -457,14 +471,16 @@ function loadVariables(cfg) {
   const variables = String(cfg.variables).trim();
   delete cfg.variables;
 
-  if (variables.length > 0) {
-    const variablesFile = path.resolve(variables);
-    if (fs.existsSync(variablesFile)) {
-      try {
-        cfg.variables = JSON.parse(fs.readFileSync(variablesFile, 'utf8'));
-      } catch (error) {
-        console.error('[ERROR] Skipping --variables file due to errors ("%s")', error.message.trim());
-      }
+  if (variables.length === 0) {
+    return;
+  }
+
+  const variablesFile = path.resolve(variables);
+  if (fs.existsSync(variablesFile)) {
+    try {
+      cfg.variables = JSON.parse(fs.readFileSync(variablesFile, 'utf8'));
+    } catch (error) {
+      console.error('[ERROR] Skipping --variables file due to errors ("%s")', error.message.trim());
     }
   }
 }
