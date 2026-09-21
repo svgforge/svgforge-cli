@@ -19,7 +19,7 @@ import {fileURLToPath} from 'node:url';
 import {load} from 'js-yaml';
 import yargs from 'yargs';
 import SVGSpriter from '@svgforge/svgforge';
-import {deepMerge, isObject, zipObject} from '@svgforge/svgforge/lib/svg-sprite/utils/index.js';
+import {deepMerge, isObject, zipObject} from '@svgforge/svgforge/utils';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const {version} = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'package.json'), 'utf8'));
