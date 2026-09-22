@@ -38,7 +38,7 @@
     "test:coverage": "mkdir -p coverage && node --test --experimental-test-coverage --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info"
   },
   "dependencies": {
-    "@svgforge/svgforge": "^3.0.0",
+    "@svgforge/svgforge": "3.0.0-beta.1",
     "js-yaml": "^5.4.2",
     "vinyl": "^3.0.1",
     "yargs": "^18.1.0"
