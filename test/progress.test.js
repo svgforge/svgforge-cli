@@ -42,25 +42,39 @@ describe('createProgressBar', () => {
     assert.ok(rendered.endsWith('\n'));
   });
 
-  it('does not render when not on a TTY', () => {
+  it('writes one line per step when not on a TTY', () => {
+    const listeners = {};
     const spriter = {
-      on() {},
-      off() {},
+      on(event, fn) {
+        listeners[event] = fn;
+      },
+      off(event) {
+        delete listeners[event];
+      },
     };
+    const chunks = [];
     const originalIsTTY = process.stderr.isTTY;
     const originalWrite = process.stderr.write;
 
     process.stderr.isTTY = false;
-    process.stderr.write = () => {
-      assert.fail('should not write without a TTY');
+    process.stderr.write = chunk => {
+      chunks.push(String(chunk));
+      return true;
     };
 
     const bar = createProgressBar(spriter);
-    const result = bar.finish();
+    bar.refreshTotal(4);
+    listeners.progress({processed: 1, total: 4});
+    listeners.progress({processed: 4, total: 4});
+    bar.finish();
 
     process.stderr.isTTY = originalIsTTY;
     process.stderr.write = originalWrite;
 
-    assert.equal(typeof result, 'undefined');
+    const lines = chunks.join('').trim().split('\n').filter(line => line.includes('%'));
+    assert.equal(lines.length, 2);
+    assert.match(lines[0], /\[/u);
+    assert.match(lines[0], /1\/4 \(25\.0%\)/u);
+    assert.match(lines.at(-1), /4\/4 \(100\.0%\)/u);
   });
 });
