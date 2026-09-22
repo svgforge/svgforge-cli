@@ -547,9 +547,9 @@ async function main() {
 
   // Register the progress bar before adding shapes: the spriter starts
   // processing the queue immediately on add(), so the bar has to listen
-  // before any progress events fire. The total is filled in after the files
-  // have been resolved below.
-  let progressTotal = 0;
+  // before any progress events fire. The total is resolved from the glob
+  // below before the add loop starts, because the queue processes shapes
+  // while they are still being added.
   const progressBar = createProgressBar(spriter);
 
   // Glob (>= 9, incl. fs.globSync) returns paths without the "./" segment, so
@@ -566,14 +566,18 @@ async function main() {
   });
   const excludedInputRoots = getExcludedInputRoots(config);
 
-  let addedShapes = 0;
+  // Resolve the final shape count before adding: progress events fire while
+  // the queue processes shapes during add(), so the bar needs the total up
+  // front to report anything but a trailing 100%.
+  const isExcludedFile = file => excludedInputRoots.some(root => file === root || file.startsWith(root + path.sep));
+  progressBar.refreshTotal(matchedFiles.filter(({file}) => !isExcludedFile(path.resolve(file))).length);
 
   for (const {baseDepth, file: filePattern} of matchedFiles) {
     const file = path.resolve(filePattern);
 
     // Skip files inside the output tree so previously generated artifacts are
     // not processed as source shapes again
-    if (excludedInputRoots.some(root => file === root || file.startsWith(root + path.sep))) {
+    if (isExcludedFile(file)) {
       continue;
     }
 
@@ -593,13 +597,7 @@ async function main() {
     }
 
     spriter.add(file, basename, fs.readFileSync(file));
-    ++addedShapes;
   }
-
-  // The progress events report a growing total while the queue processes
-  // shapes during add(), so pass the final count to the bar separately.
-  progressTotal = addedShapes;
-  progressBar.refreshTotal(progressTotal);
 
   try {
     await compile(spriter, progressBar.finish);
