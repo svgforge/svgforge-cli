@@ -547,8 +547,10 @@ async function main() {
 
   // Register the progress bar before adding shapes: the spriter starts
   // processing the queue immediately on add(), so the bar has to listen
-  // before any progress events fire.
-  const finishProgress = createProgressBar(spriter);
+  // before any progress events fire. The total is filled in after the files
+  // have been resolved below.
+  let progressTotal = 0;
+  const progressBar = createProgressBar(spriter);
 
   // Glob (>= 9, incl. fs.globSync) returns paths without the "./" segment, so
   // the base directory marker has to be detected on the original pattern. A
@@ -563,6 +565,8 @@ async function main() {
       .map(file => ({baseDepth, file}));
   });
   const excludedInputRoots = getExcludedInputRoots(config);
+
+  let addedShapes = 0;
 
   for (const {baseDepth, file: filePattern} of matchedFiles) {
     const file = path.resolve(filePattern);
@@ -589,10 +593,16 @@ async function main() {
     }
 
     spriter.add(file, basename, fs.readFileSync(file));
+    ++addedShapes;
   }
 
+  // The progress events report a growing total while the queue processes
+  // shapes during add(), so pass the final count to the bar separately.
+  progressTotal = addedShapes;
+  progressBar.refreshTotal(progressTotal);
+
   try {
-    await compile(spriter, finishProgress);
+    await compile(spriter, progressBar.finish);
   } catch (error) {
     console.error(error);
   }
