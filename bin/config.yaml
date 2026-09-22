@@ -163,8 +163,8 @@ view:
       alias: vcss
 
       template:
-        description: CSS stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/common/sprite.css
+        description: CSS stylesheet Vento template (relative to svgforge basedir)
+        default: tmpl/common/sprite.css.vto
         map: mode.view.render.css.template
 
       dest:
@@ -175,7 +175,7 @@ view:
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svgforge basedir)
+        description: Custom output Vento template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --view-dest)
@@ -186,8 +186,8 @@ view:
     alias: vx
 
     template:
-      description: HTML document Mustache template (relative to svgforge basedir)
-      default: tmpl/view/sprite.html
+      description: HTML document Vento template (relative to svgforge basedir)
+      default: tmpl/view/sprite.vto
       map: mode.view.example.template
 
     dest:
@@ -233,8 +233,8 @@ defs:
       alias: dcss
 
       template:
-        description: CSS stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/common/sprite.css
+        description: CSS stylesheet Vento template (relative to svgforge basedir)
+        default: tmpl/common/sprite.css.vto
         map: mode.defs.render.css.template
 
       dest:
@@ -245,7 +245,7 @@ defs:
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svgforge basedir)
+        description: Custom output Vento template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --defs-dest)
@@ -262,8 +262,8 @@ defs:
     alias: dx
 
     template:
-      description: HTML document Mustache template (relative to svgforge basedir)
-      default: tmpl/defs/sprite.html
+      description: HTML document Vento template (relative to svgforge basedir)
+      default: tmpl/defs/sprite.vto
       map: mode.defs.example.template
 
     dest:
@@ -309,8 +309,8 @@ symbol:
       alias: sc
 
       template:
-        description: CSS stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/common/sprite.css
+        description: CSS stylesheet Vento template (relative to svgforge basedir)
+        default: tmpl/common/sprite.css.vto
         map: mode.symbol.render.css.template
 
       dest:
@@ -321,7 +321,7 @@ symbol:
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svgforge basedir)
+        description: Custom output Vento template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --symbol-dest)
@@ -338,8 +338,8 @@ symbol:
     alias: sx
 
     template:
-      description: HTML document Mustache template (relative to svgforge basedir)
-      default: tmpl/symbol/sprite.html
+      description: HTML document Vento template (relative to svgforge basedir)
+      default: tmpl/symbol/sprite.vto
       map: mode.symbol.example.template
 
     dest:
@@ -390,8 +390,8 @@ stack:
       alias: Sc
 
       template:
-        description: CSS stylesheet Mustache template (relative to svgforge basedir)
-        default: tmpl/common/sprite.css
+        description: CSS stylesheet Vento template (relative to svgforge basedir)
+        default: tmpl/common/sprite.css.vto
         map: mode.stack.render.css.template
 
       dest:
@@ -402,7 +402,7 @@ stack:
     "*":
       description: Custom output renderings
       template:
-        description: Custom output Mustache template (relative to svgforge basedir)
+        description: Custom output Vento template (relative to svgforge basedir)
 
       dest:
         description: Custom output destination (relative to the --stack-dest)
@@ -413,8 +413,8 @@ stack:
     alias: Sx
 
     template:
-      description: HTML document Mustache template (relative to svgforge basedir)
-      default: tmpl/stack/sprite.html
+      description: HTML document Vento template (relative to svgforge basedir)
+      default: tmpl/stack/sprite.vto
       map: mode.stack.example.template
 
     dest:
@@ -423,5 +423,5 @@ stack:
       map: mode.stack.example.dest
 
 variables:
-  description: Path to external JSON file with Mustache variable definitions
+  description: Path to external JSON file with Vento variable definitions
   map: "variables"

@@ -20,6 +20,7 @@ import {load} from 'js-yaml';
 import yargs from 'yargs';
 import SVGSpriter from '@svgforge/svgforge';
 import {deepMerge, isObject, zipObject} from '@svgforge/svgforge/utils';
+import {createProgressBar} from '../lib/progress.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const {version} = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'package.json'), 'utf8'));
@@ -75,7 +76,7 @@ const RENDER_TYPES = ['css'];
  @property {object} [shape] SVG shape configuration
  @property {object} [svg] SVG output configuration
  @property {object} [mode] Sprite mode configuration
- @property {unknown} [variables] Mustache template variables (or the path to their JSON file)
+ @property {unknown} [variables] Vento template variables (or the path to their JSON file)
  */
 
 /**
@@ -103,7 +104,7 @@ const optionsMap = {};
 /**
  Resolve a path relative to the installed svgforge library
 
- Default template files (e.g. "tmpl/stack/sprite.html") ship with the
+ Default template files (e.g. "tmpl/stack/sprite.vto") ship with the
  svgforge library package, so they are resolved against its install
  location rather than against this CLI package.
 
@@ -218,8 +219,12 @@ function writeFiles(files) {
  @returns {Promise<number>} Promise resolving to the number of written files
  */
 function compile(spriter) {
+  const total = spriter._totalShapes || 0;
+  const finishProgress = createProgressBar(spriter, total);
+
   return new Promise((resolve, reject) => {
     spriter.compile((error, result) => {
+      finishProgress();
       if (error) {
         reject(error);
       } else {
@@ -458,7 +463,7 @@ function removeExcessiveExamples(cfg, argv) {
 }
 
 /**
- Read and parse the Mustache variables JSON file
+ Read and parse the Vento variables JSON file
 
  @param {SpriterConfig} cfg Configuration object to modify
  @returns {void}
