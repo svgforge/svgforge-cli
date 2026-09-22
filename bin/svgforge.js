@@ -216,12 +216,10 @@ function writeFiles(files) {
  Compile the spriter and write all generated files to disk
 
  @param {SVGSpriter} spriter Spriter instance to compile
+ @param {() => void} finishProgress Finishes the progress bar
  @returns {Promise<number>} Promise resolving to the number of written files
  */
-function compile(spriter) {
-  const total = spriter._totalShapes || 0;
-  const finishProgress = createProgressBar(spriter, total);
-
+function compile(spriter, finishProgress) {
   return new Promise((resolve, reject) => {
     spriter.compile((error, result) => {
       finishProgress();
@@ -547,6 +545,11 @@ async function main() {
 
   const spriter = new SVGSpriter(config);
 
+  // Register the progress bar before adding shapes: the spriter starts
+  // processing the queue immediately on add(), so the bar has to listen
+  // before any progress events fire.
+  const finishProgress = createProgressBar(spriter);
+
   // Glob (>= 9, incl. fs.globSync) returns paths without the "./" segment, so
   // the base directory marker has to be detected on the original pattern. A
   // literal "/./" segment marks the directory from which shape ID traversal
@@ -589,7 +592,7 @@ async function main() {
   }
 
   try {
-    await compile(spriter);
+    await compile(spriter, finishProgress);
   } catch (error) {
     console.error(error);
   }

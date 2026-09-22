@@ -24,7 +24,7 @@ describe('createProgressBar', () => {
       return true;
     };
 
-    const finish = createProgressBar(spriter, 4);
+    const finish = createProgressBar(spriter);
     listeners.progress({processed: 1, total: 4});
     listeners.progress({processed: 2, total: 4});
     listeners.progress({processed: 4, total: 4});
@@ -54,7 +54,7 @@ describe('createProgressBar', () => {
       assert.fail('should not write without a TTY');
     };
 
-    const finish = createProgressBar(spriter, 4);
+    const finish = createProgressBar(spriter);
     // No progress listener wired (createProgressBar returned a no-op), so the
     // write spy must never fire — the bar simply is not created.
     const result = finish();
