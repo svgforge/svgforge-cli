@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.0 — Vento-based sprite generation
 
+### Added
+
+* An animated **progress bar** is shown on `stderr` while shapes are being
+  processed when running on an interactive terminal. It is fed by the
+  [`progress` event of the svgforge spriter](https://github.com/svgforge/svgforge/blob/main/docs/api.md#spriter-events);
+  non-TTY runs stay silent to keep logs clean.
+
 ### Changed (breaking)
 
 * The underlying `@svgforge/svgforge` library was upgraded to **3.0.0**, which
@@ -17,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* The CLI template defaults were updated to the new Vento suffix (`.vto`):
+  `--dcss`, `-d` and the example rendering previously failed with a missing
+  `tmpl/common/sprite.css` when used against svgforge 3.0.0.
 * The `./` base directory marker works again: the documentation promises that a
   literal `./` segment in an input glob (e.g. `assets/./**/*.svg`) marks the
   base directory from which shape ID traversal starts, yielding IDs like
