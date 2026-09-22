@@ -1,0 +1,64 @@
+name: Beta release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - beta/3.0.0
+
+permissions:
+  contents: read
+
+env:
+  FORCE_COLOR: 2
+  NODE: 24 # The Node.js version to publish from
+
+jobs:
+  publish:
+    name: Publish beta build to npm
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        with:
+          version: 12
+          runtime: node@${{ env.NODE }}
+          cache: true
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test
+
+      - name: Determine versions
+        run: |
+          LIB_BETA=$(npm view @svgforge/svgforge dist-tags.beta)
+          BASE=$(node -e "var v=require('./package.json').version.split('-')[0]; console.log(v)")
+          LAST=$(npm view @svgforge/svgforge-cli dist-tags.beta 2>/dev/null || echo "${BASE}-beta.0")
+          NEXT=$(
+            node -e "
+              const last = '$LAST';
+              const m = /^$BASE-beta\\.(\\d+)$/.exec(last);
+              const n = m ? Number(m[1]) + 1 : 1;
+              process.stdout.write('$BASE-beta.' + n);
+            "
+          )
+          npm pkg set version="$NEXT"
+          npm pkg set dependencies.@svgforge/svgforge="$LIB_BETA"
+
+      - name: Configure npm authentication
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+
+      - name: Publish to npm (beta tag)
+        run: pnpm publish --no-git-checks --tag beta --access public
