@@ -28,7 +28,8 @@
     "svgforge": "./bin/svgforge.js"
   },
   "files": [
-    "bin"
+    "bin",
+    "lib"
   ],
   "scripts": {
     "prepare": "husky",
