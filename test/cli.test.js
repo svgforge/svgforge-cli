@@ -497,7 +497,7 @@ describe('svgforge-cli', () => {
           '--defs-render-css',
           '--defs-bust=false',
           '--defs-render-css-template',
-          path.join(fixtureDir, 'custom.css.mustache'),
+          path.join(fixtureDir, 'custom.css.vto'),
           '--defs-render-css-dest',
           'custom.css',
           `--dest=${dest}`,
@@ -517,7 +517,7 @@ describe('svgforge-cli', () => {
           '--view-example',
           '--view-bust=false',
           '--view-example-template',
-          path.join(fixtureDir, 'custom.html.mustache'),
+          path.join(fixtureDir, 'custom.html.vto'),
           '--view-example-dest',
           'preview.html',
           `--dest=${dest}`,
@@ -566,14 +566,14 @@ describe('svgforge-cli', () => {
       });
     });
 
-    it('passes Mustache variables to templates', async () => {
+    it('passes Vento variables to templates', async () => {
       await withTemporaryDir(async dir => {
         const dest = path.join(dir, 'out');
         await execCli([
           '--symbol',
           '--symbol-example',
           '--symbol-example-template',
-          path.join(fixtureDir, 'author.html.mustache'),
+          path.join(fixtureDir, 'author.html.vto'),
           '--symbol-example-dest',
           'preview.html',
           '--variables',
@@ -583,7 +583,8 @@ describe('svgforge-cli', () => {
         ]);
 
         const preview = readFile(path.join(dest, 'symbol', 'preview.html'));
-        assert.equal(preview, 'AUTHOR=FIXED');
+        assert.equal(preview.startsWith('AUTHOR='), true);
+        assert.match(preview, /^AUTHOR=FIXED\n?$/u);
       });
     });
   });
