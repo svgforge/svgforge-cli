@@ -1,6 +1,6 @@
 # @svgforge/svgforge-cli
 
-[![npm version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![npm downloads][npm-downloads]][npm-url]
+[![npm version][npm-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coverage Status][coveralls-image]][coveralls-url] [![npm downloads][npm-downloads]][npm-url] [![Socket][socket-image]][socket-url]
 
 [Command line interface](https://github.com/svgforge/svgforge-cli) for [svgforge](https://github.com/svgforge/svgforge) — create optimized **SVG sprites** of several types along with accompanying stylesheet resources and example documents.
 
@@ -21,6 +21,16 @@ Or as a project dependency (e.g. for usage in npm scripts):
 ```bash
 npm install --save-dev @svgforge/svgforge-cli
 ```
+
+### Help us test the upcoming v3
+
+The upcoming **v3** release (rebuilt on modern dependencies, see the [svgforge changes](https://github.com/svgforge/svgforge#changes-compared-to-svg-sprite)) is available as a beta and is looking for real-world testing:
+
+```bash
+npm install @svgforge/svgforge-cli@beta
+```
+
+Found a bug, a regression or a rough edge? Please [open an issue](https://github.com/svgforge/svgforge-cli/issues) — every report makes the stable release better.
 
 ## Usage
 
@@ -116,3 +126,6 @@ The test suite spawns the CLI as a child process against fixtures in `test/fixtu
 
 [coveralls-url]: https://coveralls.io/github/svgforge/svgforge-cli?branch=main
 [coveralls-image]: https://img.shields.io/coveralls/github/svgforge/svgforge-cli/main?logo=coveralls
+
+[socket-url]: https://socket.dev/npm/package/@svgforge/svgforge-cli
+[socket-image]: https://badge.socket.dev/npm/package/@svgforge/svgforge-cli
