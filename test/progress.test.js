@@ -3,17 +3,19 @@ import process from 'node:process';
 import {describe, it} from 'node:test';
 import {createProgressBar} from '../lib/progress.js';
 
+const createSpriterStub = listeners => ({
+  on(event, fn) {
+    listeners[event] = fn;
+  },
+  off(event) {
+    delete listeners[event];
+  },
+});
+
 describe('createProgressBar', () => {
   it('writes an animated progress bar on interactive terminals', () => {
     const listeners = {};
-    const spriter = {
-      on(event, fn) {
-        listeners[event] = fn;
-      },
-      off(event) {
-        delete listeners[event];
-      },
-    };
+    const spriter = createSpriterStub(listeners);
     const chunks = [];
     const originalIsTTY = process.stderr.isTTY;
     const originalWrite = process.stderr.write;
@@ -42,16 +44,9 @@ describe('createProgressBar', () => {
     assert.ok(rendered.endsWith('\n'));
   });
 
-  it('writes one line per step when not on a TTY', () => {
+  it('writes nothing while running when not on a TTY', () => {
     const listeners = {};
-    const spriter = {
-      on(event, fn) {
-        listeners[event] = fn;
-      },
-      off(event) {
-        delete listeners[event];
-      },
-    };
+    const spriter = createSpriterStub(listeners);
     const chunks = [];
     const originalIsTTY = process.stderr.isTTY;
     const originalWrite = process.stderr.write;
@@ -65,16 +60,43 @@ describe('createProgressBar', () => {
     const bar = createProgressBar(spriter);
     bar.refreshTotal(4);
     listeners.progress({processed: 1, total: 4});
+    listeners.progress({processed: 2, total: 4});
     listeners.progress({processed: 4, total: 4});
+
+    assert.equal(chunks.length, 0, 'no output before finish()');
+
     bar.finish();
 
     process.stderr.isTTY = originalIsTTY;
     process.stderr.write = originalWrite;
 
-    const lines = chunks.join('').trim().split('\n').filter(line => line.includes('%'));
-    assert.equal(lines.length, 2);
-    assert.match(lines[0], /\[/u);
-    assert.match(lines[0], /1\/4 \(25\.0%\)/u);
-    assert.match(lines.at(-1), /4\/4 \(100\.0%\)/u);
+    const rendered = chunks.join('');
+    assert.equal(rendered.split('\n').filter(Boolean).length, 1, 'exactly one summary line');
+    assert.ok(rendered.startsWith('['));
+    assert.match(rendered, /4\/4 \(100\.0%\)\n/u);
+    assert.ok(!rendered.includes('\r'), 'no carriage-return redraws');
+  });
+
+  it('writes no summary line when there is nothing to process', () => {
+    const listeners = {};
+    const spriter = createSpriterStub(listeners);
+    const chunks = [];
+    const originalIsTTY = process.stderr.isTTY;
+    const originalWrite = process.stderr.write;
+
+    process.stderr.isTTY = false;
+    process.stderr.write = chunk => {
+      chunks.push(String(chunk));
+      return true;
+    };
+
+    const bar = createProgressBar(spriter);
+    bar.refreshTotal(0);
+    bar.finish();
+
+    process.stderr.isTTY = originalIsTTY;
+    process.stderr.write = originalWrite;
+
+    assert.equal(chunks.join(''), '');
   });
 });
