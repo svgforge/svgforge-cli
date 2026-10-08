@@ -21,6 +21,7 @@ import yargs from 'yargs';
 import SVGSpriter from '@svgforge/svgforge';
 import {deepMerge, isObject, zipObject} from '@svgforge/svgforge/utils';
 import {createProgressBar} from '../lib/progress.js';
+import {printSummary} from '../lib/report.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const {version} = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'package.json'), 'utf8'));
@@ -528,6 +529,7 @@ function getExcludedInputRoots(cfg) {
  @returns {Promise<void>} Promise resolving after all sprites were written
  */
 async function main() {
+  const startedAt = Date.now();
   const parser = registerOptions();
   const argv = parser.parse();
 
@@ -566,11 +568,13 @@ async function main() {
   });
   const excludedInputRoots = getExcludedInputRoots(config);
 
+  const isExcludedFile = file => excludedInputRoots.some(root => file === root || file.startsWith(root + path.sep));
+  const inputFiles = matchedFiles.filter(({file}) => !isExcludedFile(path.resolve(file)));
+
   // Resolve the final shape count before adding: progress events fire while
   // the queue processes shapes during add(), so the bar needs the total up
   // front to report anything but a trailing 100%.
-  const isExcludedFile = file => excludedInputRoots.some(root => file === root || file.startsWith(root + path.sep));
-  progressBar.refreshTotal(matchedFiles.filter(({file}) => !isExcludedFile(path.resolve(file))).length);
+  progressBar.refreshTotal(inputFiles.length);
 
   for (const {baseDepth, file: filePattern} of matchedFiles) {
     const file = path.resolve(filePattern);
@@ -600,7 +604,17 @@ async function main() {
   }
 
   try {
-    await compile(spriter, progressBar.finish);
+    const written = await compile(spriter, progressBar.finish);
+
+    printSummary({
+      processed: inputFiles.length,
+      skipped: matchedFiles.length - inputFiles.length,
+      modes: config.mode,
+      files: written,
+      dest: config.dest ?? '.',
+      elapsedMs: Date.now() - startedAt,
+      concurrency: spriter._limit,
+    });
   } catch (error) {
     console.error(error);
   }

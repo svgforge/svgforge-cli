@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+* A compact **run summary** is printed to `stderr` after every run: the number
+  of processed shapes (along with excluded input files), the active sprite
+  modes with their enabled options (example, inline, stylesheet rendering),
+  the number of written files, the elapsed time and the shape concurrency.
+
+### Changed
+
+* The progress bar line is capped at **80 characters** and at the current
+  terminal width. The width is re-read on every redraw, so terminals that are
+  resized while a run is in progress (e.g. xterm) are taken into account.
+
 ## 3.0.0 — Vento-based sprite generation
 
 ### Added
