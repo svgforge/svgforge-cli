@@ -5,21 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-
-### Added
-
-* A compact **run summary** is printed to `stderr` after every run: the number
-  of processed shapes (along with excluded input files), the active sprite
-  modes with their enabled options (example, inline, stylesheet rendering),
-  the number of written files, the elapsed time and the shape concurrency.
-
-### Changed
-
-* The progress bar line is capped at **80 characters** and at the current
-  terminal width. The width is re-read on every redraw, so terminals that are
-  resized while a run is in progress (e.g. xterm) are taken into account.
-
 ## 3.0.0 — Vento-based sprite generation
 
 ### Added
@@ -31,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the final state instead of one line per processed shape, so CI logs stay
   clean.
 
+* A compact **run summary** is printed to `stderr` after every run: the number
+  of processed shapes (along with excluded input files), the active sprite
+  modes with their enabled options (example, inline, stylesheet rendering),
+  the number of written files, the elapsed time and the shape concurrency.
+
 ### Changed (breaking)
 
 * The underlying `@svgforge/svgforge` library was upgraded to **3.0.0**, which
@@ -39,8 +29,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   templating (see the [svgforge changelog](https://github.com/svgforge/svgforge/blob/main/CHANGELOG.md)
   for details — custom templates and `variables` functions may need adjustment).
 
+### Changed
+
+* Dependencies updated: `@svgforge/svgforge` is now required as `^3.0.0`
+  (stable release instead of the beta pin), `js-yaml` as `^5.4.3` and `yargs`
+  as `^18.2.0`.
+* The progress bar line is capped at **80 characters** and at the current
+  terminal width. The width is re-read on every redraw, so terminals that are
+  resized while a run is in progress (e.g. xterm) are taken into account.
+
 ### Fixed
 
+* The published npm package ships the new `lib/` directory (progress and
+  report modules); the `files` list previously contained only `bin/`.
 * The CLI template defaults were updated to the new Vento suffix (`.vto`):
   `--dcss`, `-d` and the example rendering previously failed with a missing
   `tmpl/common/sprite.css` when used against svgforge 3.0.0.
