@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * An animated **progress bar** is shown on `stderr` while shapes are being
   processed when running on an interactive terminal. It is fed by the
   [`progress` event of the svgforge spriter](https://github.com/svgforge/svgforge/blob/main/docs/api.md#spriter-events);
-  non-TTY runs stay silent to keep logs clean.
+  non-TTY runs (CI, pipes, log files) print only a single summary line with
+  the final state instead of one line per processed shape, so CI logs stay
+  clean.
 
 ### Changed (breaking)
 
