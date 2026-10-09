@@ -22,16 +22,6 @@ Or as a project dependency (e.g. for usage in npm scripts):
 npm install --save-dev @svgforge/svgforge-cli
 ```
 
-### Help us test the upcoming v3
-
-The upcoming **v3** release (rebuilt on modern dependencies, see the [svgforge changes](https://github.com/svgforge/svgforge#changes-compared-to-svg-sprite)) is available as a beta and is looking for real-world testing:
-
-```bash
-npm install @svgforge/svgforge-cli@beta
-```
-
-Found a bug, a regression or a rough edge? Please [open an issue](https://github.com/svgforge/svgforge-cli/issues) — every report makes the stable release better.
-
 ## Usage
 
 ```
