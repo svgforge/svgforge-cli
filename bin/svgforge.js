@@ -552,7 +552,7 @@ async function main() {
   // before any progress events fire. The total is resolved from the glob
   // below before the add loop starts, because the queue processes shapes
   // while they are still being added.
-  const progressBar = createProgressBar(spriter);
+  const progressBar = createProgressBar(spriter, config.quiet);
 
   // Glob (>= 9, incl. fs.globSync) returns paths without the "./" segment, so
   // the base directory marker has to be detected on the original pattern. A
