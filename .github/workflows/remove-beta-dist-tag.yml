@@ -1,0 +1,27 @@
+name: Remove beta dist-tags
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_COLOR: 2
+
+jobs:
+  untag:
+    name: Remove stale beta dist-tags
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Configure npm authentication
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+
+      - name: Remove beta dist-tag from @svgforge/svgforge-cli
+        run: npm dist-tag rm @svgforge/svgforge-cli beta
+
+      - name: Remove beta dist-tag from @svgforge/svgforge
+        continue-on-error: true # The CLI token may not have access to the main package
+        run: npm dist-tag rm @svgforge/svgforge beta
