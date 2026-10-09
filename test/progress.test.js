@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import process from 'node:process';
-import {describe, it} from 'node:test';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  it,
+} from 'node:test';
 import {setTimeout as delay} from 'node:timers/promises';
 import {createProgressBar} from '../lib/progress.js';
 
@@ -45,6 +50,23 @@ const createSpriterStub = listeners => ({
 });
 
 describe('createProgressBar', () => {
+  // The progress bar treats a CI environment as non-interactive. These tests
+  // simulate a real terminal, so keep CI off unless a test sets it explicitly.
+  let originalCI;
+
+  beforeEach(() => {
+    originalCI = process.env.CI;
+    delete process.env.CI;
+  });
+
+  afterEach(() => {
+    if (originalCI === undefined) {
+      delete process.env.CI;
+    } else {
+      process.env.CI = originalCI;
+    }
+  });
+
   it('writes an animated progress bar on interactive terminals', () => {
     const listeners = {};
     const spriter = createSpriterStub(listeners);
@@ -74,6 +96,43 @@ describe('createProgressBar', () => {
     assert.match(rendered, /4\/4/u);
     assert.match(rendered, /100\.0%\)/u);
     assert.ok(rendered.endsWith('\n'));
+  });
+
+  describe('in a CI environment', () => {
+    beforeEach(() => {
+      process.env.CI = 'true';
+    });
+
+    it('does not redraw on a TTY', () => {
+      const listeners = {};
+      const spriter = createSpriterStub(listeners);
+      const chunks = [];
+      const originalIsTTY = process.stderr.isTTY;
+      const originalWrite = process.stderr.write;
+
+      process.stderr.isTTY = true;
+      process.stderr.write = chunk => {
+        chunks.push(String(chunk));
+        return true;
+      };
+
+      const bar = createProgressBar(spriter);
+      bar.refreshTotal(4);
+      listeners.progress({processed: 1, total: 4});
+      listeners.progress({processed: 4, total: 4});
+
+      assert.equal(chunks.length, 0, 'no output before finish()');
+
+      bar.finish();
+
+      process.stderr.isTTY = originalIsTTY;
+      process.stderr.write = originalWrite;
+
+      const rendered = chunks.join('');
+      assert.equal(rendered.includes('\r'), false, 'no carriage-return redraws in CI');
+      assert.equal(rendered.split('\n').filter(Boolean).length, 1, 'exactly one summary line');
+      assert.match(rendered, /4\/4 \(100\.0%\)\n/u);
+    });
   });
 
   it('writes nothing while running when not on a TTY', () => {

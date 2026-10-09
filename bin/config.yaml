@@ -12,6 +12,11 @@ log:
   description: Logging verbosity ("info", "verbose" or "debug")
   alias: l
   map: log
+quiet:
+  description: Suppress all output except errors
+  alias: q
+  default: false
+  map: quiet
 
 shape:
   id:
