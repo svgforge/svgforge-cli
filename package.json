@@ -1,6 +1,6 @@
 {
   "name": "@svgforge/svgforge-cli",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "author": "svgforge (https://github.com/SpotlightOn)",
   "description": "Command line interface for svgforge \u2014 create SVG sprites & stacks with stylesheet resources (CSS, Sass, etc.)",
   "homepage": "https://github.com/svgforge/svgforge-cli",
