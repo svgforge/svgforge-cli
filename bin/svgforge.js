@@ -19,7 +19,12 @@ import {fileURLToPath} from 'node:url';
 import {load} from 'js-yaml';
 import yargs from 'yargs';
 import SVGSpriter from '@svgforge/svgforge';
-import {deepMerge, isObject, zipObject} from '@svgforge/svgforge/utils';
+import {
+  deepMerge,
+  isObject,
+  zipObject,
+  isResvgAvailable,
+} from '@svgforge/svgforge/utils';
 import {createProgressBar} from '../lib/progress.js';
 import {printSummary} from '../lib/report.js';
 
@@ -554,6 +559,14 @@ async function main() {
   // while they are still being added.
   const progressBar = createProgressBar(spriter, config.quiet);
 
+  // Report skipped shapes as they happen — e.g. SVGs without dimensions when
+  // the optional `@resvg/resvg-js` fallback is not installed, or files that are
+  // not valid SVG/XML. The summary counts them and, for missing dimensions,
+  // ends with the install recommendation.
+  spriter.on('shape-skipped', ({file, error}) => {
+    process.stderr.write(`Skipping "${file}" (${error.message})\n`);
+  });
+
   // Glob (>= 9, incl. fs.globSync) returns paths without the "./" segment, so
   // the base directory marker has to be detected on the original pattern. A
   // literal "/./" segment marks the directory from which shape ID traversal
@@ -614,6 +627,9 @@ async function main() {
       dest: config.dest ?? '.',
       elapsedMs: Date.now() - startedAt,
       concurrency: spriter._limit,
+      resvg: isResvgAvailable(),
+      dimensionSkipped: spriter._dimensionSkipped ?? 0,
+      errorSkipped: spriter._errorSkipped ?? 0,
     });
   } catch (error) {
     console.error(error);

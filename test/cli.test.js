@@ -589,6 +589,43 @@ describe('svgforge-cli', () => {
     });
   });
 
+  describe('dimension fallback without @resvg/resvg-js', () => {
+    const withoutDims = path.join(fixtureDir, 'without-dims.svg');
+
+    it('warns with the install hint and skips the shape when the fallback is missing', async () => {
+      // The warning path only exists while the optional package is not
+      // installed; the test environment runs the development install without
+      // it, so the test self-skips if resvg is installed manually.
+      const {isResvgAvailable} = await import('@svgforge/svgforge/utils');
+      if (isResvgAvailable()) {
+        return;
+      }
+
+      await withTemporaryDir(async dir => {
+        const dest = path.join(dir, 'out');
+        const {stderr} = await execCli(['--symbol', `--dest=${dest}`, withoutDims]);
+
+        assert.match(stderr, /Skipping "without-dims"/u);
+        assert.match(stderr, /npm install @resvg\/resvg-js/u);
+        assert.match(stderr, /tip\s+npm install @resvg\/resvg-js/u);
+      });
+    });
+  });
+
+  describe('invalid SVG input', () => {
+    const invalid = path.join(fixtureDir, 'invalid.svg');
+
+    it('reports the skipped file with the parser reason and counts it in the summary', async () => {
+      await withTemporaryDir(async dir => {
+        const dest = path.join(dir, 'out');
+        const {stderr} = await execCli(['--symbol', `--dest=${dest}`, invalid]);
+
+        assert.match(stderr, /Skipping ".*invalid\.svg" \(Invalid SVG file \(.+/u);
+        assert.match(stderr, /skipped\s+1 \(1 failed\)/u);
+      });
+    });
+  });
+
   describe('short aliases', () => {
     it('accepts the short argument syntax', async () => {
       await withTemporaryDir(async dir => {
