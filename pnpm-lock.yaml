@@ -1,7 +1,7 @@
 lockfileVersion: '9.0'
 
 settings:
-  autoInstallPeers: true
+  autoInstallPeers: false
   excludeLinksFromLockfile: false
 
 importers:
@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@svgforge/svgforge':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: ^3.1.0
+        version: 3.1.0(@resvg/resvg-js@2.6.2)
       js-yaml:
         specifier: ^5.4.3
         version: 5.4.3
@@ -307,9 +307,11 @@ packages:
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
 
-  '@svgforge/svgforge@3.0.0':
-    resolution: {integrity: sha512-WjtHoZ4xEHXL5VpNA0hCRAH89WA58sKFeJTiN3I5TljQ5TCw1Rj3nAjR0elOJqyAp/RLVmg6rEY9f9rBhWLoZg==}
+  '@svgforge/svgforge@3.1.0':
+    resolution: {integrity: sha512-epW+Dpt+NfZBZUvi1xr+hrTEIZBlX3klHKKQQdPunRD4ayMKyjGtYmNIZvPZNIJtfcSguICyZZojOQ5xUhVsog==}
     engines: {node: '>=24'}
+    peerDependencies:
+      '@resvg/resvg-js': ^2.6.2
 
   '@tybys/wasm-util@0.10.4':
     resolution: {integrity: sha512-W3c4gRigFS0T/Ma4qIYF3GDAc5AQdHb1yL5znJT1Zv1YaD9Kitx656wBjvr19qbiosmZT8lWDM5BEMynUqX65A==}
@@ -2169,7 +2171,7 @@ snapshots:
       estraverse: 5.3.0
       picomatch: 4.0.7
 
-  '@svgforge/svgforge@3.0.0':
+  '@svgforge/svgforge@3.1.0(@resvg/resvg-js@2.6.2)':
     dependencies:
       '@resvg/resvg-js': 2.6.2
       '@xmldom/xmldom': 0.9.12

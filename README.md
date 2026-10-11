@@ -30,6 +30,35 @@ svgforge [options] files
 
 Run `svgforge --help` to get a full list of all available options, or consult the [command line reference](docs/command-line.md).
 
+After each run the CLI prints a compact summary to `stderr`: processed shapes, active modes,
+written files and elapsed time. It also reports whether the
+[`@resvg/resvg-js`](https://www.npmjs.com/package/@resvg/resvg-js) dimension fallback — only
+used for the unusual case of SVGs without a `viewBox` or `width`/`height` — is installed:
+
+```text
+shapes    42 processed
+modes     view (example: yes)
+resvg     available
+output    3 files → out
+elapsed   0.51s (concurrency 4)
+```
+
+Skipped shapes — files that could not be processed, e.g. invalid SVG/XML, or SVGs without
+a determinable size when the fallback is missing — never end up in the sprite. Every skip is
+printed immediately as `Skipping "<file>" (<reason>)` and counted on an extra summary line:
+
+```text
+shapes    3 processed
+skipped   1 (1 failed)
+modes     symbol (inline: no, example: no)
+```
+
+When the `@resvg/resvg-js` package is missing and the fallback is needed for an SVG without a
+`viewBox` or `width`/`height`, such a shape is skipped as well: the summary shows
+`resvg     not installed`, the skip is counted as `without dimensions`, no invalid `NaN`
+viewBox values are produced, and the summary ends with the recommendation
+`npm install @resvg/resvg-js` to enable the fallback.
+
 ### Examples
 
 Create a `view` sprite of all SVG files in `assets/` and write the result — along with an example HTML document — to the `out/` directory:

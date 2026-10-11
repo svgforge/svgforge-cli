@@ -1,4 +1,8 @@
 allowBuilds:
   unrs-resolver: true
 minimumReleaseAgeExclude:
-  - '@svgforge/svgforge@3.0.0'
+  - '@svgforge/svgforge@3.1.0'
+peerDependencyRules:
+  ignoreMissing:
+    - '@resvg/resvg-js'
+autoInstallPeers: false

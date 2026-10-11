@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+* Skipped shapes are surfaced consistently. Every shape that cannot be processed is written
+  to `stderr` immediately as `Skipping "<file>" (<reason>)` and counted on an extra
+  `skipped …` line in the end-of-run summary:
+
+  * **Invalid SVG/XML** is reported with the actual parser reason — e.g.
+    `Invalid SVG file (Opening and ending tag mismatch: "rect" != "svg")` — instead of
+    xmldom's `Reporting fatalError … caused …` boilerplate. The raw `[xmldom fatalError]`
+    console noise is gone.
+  * **SVGs without a determinable size** when the optional `@resvg/resvg-js` dimension
+    fallback is missing (see below) are counted as `… without dimensions`.
+
+* The run summary reports whether the `@resvg/resvg-js` dimension-fallback package is
+  installed (`resvg     available` vs. `resvg     not installed`). It is only needed for
+  the unusual case of an SVG without a `viewBox` or `width`/`height`: such a shape is
+  skipped with an immediate **warning** on `stderr` — `Skipping "<file>" (...)` carrying
+  the install command (`npm install @resvg/resvg-js`) — no `NaN` viewBox values are
+  emitted, and the summary ends with that install recommendation.
+
 ## 3.0.0 — Vento-based sprite generation
 
 ### Changed (breaking)
