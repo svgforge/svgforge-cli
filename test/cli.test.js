@@ -45,6 +45,15 @@ describe('svgforge-cli', () => {
       assert.match(stdout, /\d+\.\d+\.\d+/u);
     });
 
+    it('reports the CLI version in the end-of-run summary', async () => {
+      await withTemporaryDir(async dir => {
+        const dest = path.join(dir, 'out');
+        const {stderr} = await execCli(['--symbol', `--dest=${dest}`, ...svgFiles]);
+
+        assert.match(stderr, /^version\s+svgforge-cli \d+\.\d+\.\d+$/mu);
+      });
+    });
+
     it('prints usage information for --help', async () => {
       const {stdout} = await execCli(['--help']);
       assert.match(stdout, /^Usage:/mu);

@@ -630,6 +630,7 @@ async function main() {
       resvg: isResvgAvailable(),
       dimensionSkipped: spriter._dimensionSkipped ?? 0,
       errorSkipped: spriter._errorSkipped ?? 0,
+      cliVersion: version,
     });
   } catch (error) {
     console.error(error);

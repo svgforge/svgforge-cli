@@ -25,6 +25,20 @@ describe('formatSummary', () => {
     assert.ok(lines.every(line => line.length <= 80), 'all lines within 80 characters');
   });
 
+  it('reports the CLI version when it is provided', () => {
+    const lines = formatSummary({
+      processed: 2,
+      modes: {symbol: {}},
+      files: 1,
+      dest: '.',
+      elapsedMs: 500,
+      resvg: true,
+      cliVersion: '3.1.0',
+    });
+
+    assert.equal(lines.at(-1), 'version   svgforge-cli 3.1.0');
+  });
+
   it('describes every active mode with its enabled options', () => {
     const lines = formatSummary({
       processed: 8,
