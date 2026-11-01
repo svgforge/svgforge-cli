@@ -154,7 +154,7 @@ function addOption(parser, name, option) {
     if ('default' in option) {
       const templated = name.endsWith('-template');
       const defaultValue = templated ? resolveSvgForgePath(option.default) : option.default;
-      parser = parser.default(alias, defaultValue);
+      parser = parser.default(alias, defaultValue, templated ? option.default : undefined);
 
       if (option.default === true || option.default === false) {
         parser = parser.boolean(name);
