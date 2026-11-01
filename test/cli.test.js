@@ -81,7 +81,7 @@ describe('svgforge-cli', () => {
         assert.match(css, /\.svg-one-dims\s*\{/u);
         assert.match(css, /\.svg-two-dims\s*\{/u);
 
-        const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.defs.svg'));
         assert.match(sprite, /^<\?xml/u);
         assert.match(sprite, /<svg/u);
         assert.match(sprite, /id="one"/u);
@@ -103,7 +103,7 @@ describe('svgforge-cli', () => {
 
         const example = readFile(path.join(dest, 'defs', 'sprite.defs.html'));
         assert.match(example, /<html/iu);
-        assert.match(example, /sprite.css.svg/u);
+        assert.match(example, /sprite.defs.svg/u);
       });
     });
 
@@ -112,7 +112,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', `--dest=${dest}`, ...svgFiles]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /<symbol viewBox="0 0 24 24" id="one"/u);
         assert.match(sprite, /<symbol viewBox="0 0 24 24" id="two"/u);
       });
@@ -123,7 +123,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--defs', `--dest=${dest}`, ...svgFiles]);
 
-        const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.defs.svg'));
         assert.match(sprite, /<defs>/u);
         assert.match(sprite, /id="one"/u);
         assert.match(sprite, /id="two"/u);
@@ -135,7 +135,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--stack', `--dest=${dest}`, ...svgFiles]);
 
-        const sprite = readFile(path.join(dest, 'stack', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'stack', 'svg', 'sprite.stack.svg'));
         assert.match(sprite, /:root>svg:target/u);
         assert.match(sprite, /id="one"/u);
         assert.match(sprite, /id="two"/u);
@@ -192,7 +192,7 @@ describe('svgforge-cli', () => {
         await execCli(['--view', '--symbol', '--view-bust=false', `--dest=${dest}`, ...svgFiles]);
 
         assert.equal(fs.existsSync(path.join(dest, 'view', 'svg', 'sprite.view.svg')), true);
-        assert.equal(fs.existsSync(path.join(dest, 'symbol', 'svg', 'sprite.css.svg')), true);
+        assert.equal(fs.existsSync(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg')), true);
       });
     });
   });
@@ -211,7 +211,7 @@ describe('svgforge-cli', () => {
         const css = readFile(path.join(dest, 'symbol', 'sprite.css'));
         assert.match(css, /\.svg-one/u);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /<symbol/u);
       });
     });
@@ -227,7 +227,7 @@ describe('svgforge-cli', () => {
           ...svgFiles,
         ]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /<svg[^>]*data-testid="sprite-root"/u);
       });
     });
@@ -244,7 +244,7 @@ describe('svgforge-cli', () => {
           ...svgFiles,
         ]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /viewBox="-5 -5 34 34"/u);
         assert.match(sprite, /id="one"/u);
       });
@@ -264,7 +264,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', `--dest=${dest}`, './nested/**/*.svg'], {cwd: fixtureDir});
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /id="nested--leaf"/u);
       });
     });
@@ -274,7 +274,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', `--dest=${dest}`, 'nested/./**/*.svg'], {cwd: fixtureDir});
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /id="leaf"/u);
         assert.doesNotMatch(sprite, /id="nested--leaf"/u);
       });
@@ -285,7 +285,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-id-separator=__', `--dest=${dest}`, './nested/**/*.svg'], {cwd: fixtureDir});
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /id="nested__leaf"/u);
         assert.doesNotMatch(sprite, /id="nested--leaf"/u);
       });
@@ -296,7 +296,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-id-generator=%s-icon', `--dest=${dest}`, ...svgFiles]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /id="one-icon"/u);
         assert.match(sprite, /id="two-icon"/u);
       });
@@ -307,7 +307,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-id-whitespace=-', `--dest=${dest}`, path.join(fixtureDir, 'with space.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /id="with-space"/u);
       });
     });
@@ -373,7 +373,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-meta', path.join(fixtureDir, 'meta.yaml'), `--dest=${dest}`, path.join(fixtureDir, 'one.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /aria-labelledby=/u);
         assert.match(sprite, /<title[^>]*>Alpha<\/title>/u);
         assert.match(sprite, /<desc[^>]*>First icon<\/desc>/u);
@@ -395,7 +395,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=svgo', '--shape-transform-svgo', path.join(fixtureDir, 'svgo.config.json'), `--dest=${dest}`, path.join(fixtureDir, 'comment.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /<!--KEEP-SPECIAL-->/u);
       });
     });
@@ -407,7 +407,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--svg-xmldecl=false', `--dest=${dest}`, ...svgFiles]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.doesNotMatch(sprite, /^<\?xml/u);
       });
     });
@@ -417,7 +417,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--symbol-bust=false', `--dest=${dest}`, path.join(fixtureDir, 'doctype.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /<!DOCTYPE/u);
       });
 
@@ -425,7 +425,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--symbol-bust=false', '--svg-doctype=false', `--dest=${dest}`, path.join(fixtureDir, 'doctype.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.doesNotMatch(sprite, /<!DOCTYPE/u);
       });
     });
@@ -435,7 +435,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=', '--svg-namespace-ids=false', `--dest=${dest}`, path.join(fixtureDir, 'ref.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /id="arrow"/u);
         assert.match(sprite, /href="#arrow"/u);
       });
@@ -446,7 +446,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=', '--svg-namespace-classnames=false', `--dest=${dest}`, path.join(fixtureDir, 'ref.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /class="ic"/u);
       });
     });
@@ -456,7 +456,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--shape-transform=', '--svg-namespace-prefix=p-', `--dest=${dest}`, path.join(fixtureDir, 'ref.svg')]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /id="p-aarrow"/u);
         assert.match(sprite, /href="#p-aarrow"/u);
       });
@@ -560,7 +560,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--defs', '--defs-inline', `--dest=${dest}`, ...svgFiles]);
 
-        const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'defs', 'svg', 'sprite.defs.svg'));
         assert.match(sprite, /style="position:absolute"/u);
       });
     });
@@ -570,7 +570,7 @@ describe('svgforge-cli', () => {
         const dest = path.join(dir, 'out');
         await execCli(['--symbol', '--symbol-inline', `--dest=${dest}`, ...svgFiles]);
 
-        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.css.svg'));
+        const sprite = readFile(path.join(dest, 'symbol', 'svg', 'sprite.symbol.svg'));
         assert.match(sprite, /style="position:absolute"/u);
       });
     });
