@@ -27,19 +27,16 @@ jobs:
           persist-credentials: false
 
       - name: Install pnpm and Node.js
-        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        uses: pnpm/setup@v3
         with:
           version: 12
-          runtime: node@24
           cache: true
+          require-lockfile: true
 
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Reject local link overrides (Kernregel)
+      - name: Reject local link overrides
         run: |
           if grep -R "link:" pnpm-workspace.yaml pnpm-lock.yaml 2>/dev/null; then
-            echo "::error::pnpm-workspace.yaml/pnpm-lock.yaml contain a local link: override. Run ./set-dev.sh false before committing." >&2
+            echo "::error::pnpm-workspace.yaml/pnpm-lock.yaml contain a local link: override." >&2
             exit 1
           fi
           echo "No link: override found — lockfile resolves from the registry."
