@@ -41,7 +41,6 @@
   "dependencies": {
     "@svgforge/svgforge": "^3.1.0",
     "js-yaml": "^5.4.3",
-    "vinyl": "^3.0.1",
     "yargs": "^18.2.0"
   },
   "devDependencies": {

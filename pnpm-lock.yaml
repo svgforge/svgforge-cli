@@ -14,9 +14,6 @@ importers:
       js-yaml:
         specifier: ^5.4.3
         version: 5.4.3
-      vinyl:
-        specifier: ^3.0.1
-        version: 3.0.1
       yargs:
         specifier: ^18.2.0
         version: 18.2.0

@@ -68,9 +68,17 @@ const RENDER_TYPES = ['css'];
  */
 
 /**
- Recursively nested map of vinyl files
+ A compiled output file (sprite, stylesheet or example document)
 
- @typedef {{[key: string]: File | FileMap}} FileMap
+ @typedef {object} FileLike
+ @property {string} path Absolute output path
+ @property {Buffer|string} contents File contents
+ */
+
+/**
+ Recursively nested map of file objects
+
+ @typedef {{[key: string]: FileLike | FileMap}} FileMap
  */
 
 /**
@@ -195,7 +203,7 @@ function addConfigMap(store, keyPath, value) {
 /**
  Recursively write files to disk
 
- @param {FileMap} files Nested map of vinyl files
+ @param {FileMap} files Nested map of file objects
  @returns {number} Number of written files
  */
 function writeFiles(files) {
