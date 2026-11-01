@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `vinyl` is completely removed from the CLI: the dependency in `package.json`,
   the import and every type reference are gone. Compiled files are detected by
   their `path` property since 1.0.1, so the package was only still declared.
+* Requires `@svgforge/svgforge` 3.2.0.
 
 ### Removed
 
