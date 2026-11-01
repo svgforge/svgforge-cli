@@ -1,8 +1,8 @@
 {
   "name": "@svgforge/svgforge-cli",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "author": "svgforge (https://github.com/SpotlightOn)",
-  "description": "Command line interface for svgforge \u2014 create SVG sprites & stacks with stylesheet resources (CSS, Sass, etc.)",
+  "description": "Command line interface for svgforge \u2014 create SVG sprites & stacks with stylesheet resources",
   "homepage": "https://github.com/svgforge/svgforge-cli",
   "repository": {
     "type": "git",
@@ -39,9 +39,8 @@
     "test:coverage": "mkdir -p coverage && node --test --experimental-test-coverage --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info"
   },
   "dependencies": {
-    "@svgforge/svgforge": "^3.1.0",
+    "@svgforge/svgforge": "^3.2.0",
     "js-yaml": "^5.4.3",
-    "vinyl": "^3.0.1",
     "yargs": "^18.2.0"
   },
   "devDependencies": {

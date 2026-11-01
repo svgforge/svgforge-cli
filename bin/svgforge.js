@@ -68,9 +68,17 @@ const RENDER_TYPES = ['css'];
  */
 
 /**
- Recursively nested map of vinyl files
+ A compiled output file (sprite, stylesheet or example document)
 
- @typedef {{[key: string]: File | FileMap}} FileMap
+ @typedef {object} FileLike
+ @property {string} path Absolute output path
+ @property {Buffer|string} contents File contents
+ */
+
+/**
+ Recursively nested map of file objects
+
+ @typedef {{[key: string]: FileLike | FileMap}} FileMap
  */
 
 /**
@@ -146,7 +154,7 @@ function addOption(parser, name, option) {
     if ('default' in option) {
       const templated = name.endsWith('-template');
       const defaultValue = templated ? resolveSvgForgePath(option.default) : option.default;
-      parser = parser.default(alias, defaultValue);
+      parser = parser.default(alias, defaultValue, templated ? option.default : undefined);
 
       if (option.default === true || option.default === false) {
         parser = parser.boolean(name);
@@ -195,7 +203,7 @@ function addConfigMap(store, keyPath, value) {
 /**
  Recursively write files to disk
 
- @param {FileMap} files Nested map of vinyl files
+ @param {FileMap} files Nested map of file objects
  @returns {number} Number of written files
  */
 function writeFiles(files) {

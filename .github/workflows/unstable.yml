@@ -11,7 +11,6 @@ permissions:
 
 env:
   FORCE_COLOR: 2
-  NODE: 24 # The Node.js version to publish from
 
 jobs:
   publish:
@@ -26,14 +25,11 @@ jobs:
           persist-credentials: false
 
       - name: Install pnpm and Node.js
-        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        uses: pnpm/setup@v3
         with:
           version: 12
-          runtime: node@${{ env.NODE }}
           cache: true
-
-      - name: Install dependencies
-        run: pnpm install
+          require-lockfile: true
 
       - name: Lint
         run: pnpm lint

@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.2.0 — Sprite filenames, vinyl removal and dead options
+
+### Changed
+
+* The `defs`, `symbol` and `stack` modes now write their sprites to
+  `sprite.defs.svg`, `sprite.symbol.svg` and `sprite.stack.svg` by default,
+  matching the library defaults. Previously the CLI overrode them with the
+  outdated `sprite.css.svg`.
+* `vinyl` is completely removed from the CLI: the dependency in `package.json`,
+  the import and every type reference are gone. Compiled files are detected by
+  their `path` property since 1.0.1, so the package was only still declared.
+* Requires `@svgforge/svgforge` 3.2.0.
+
+### Removed
+
+* Dropped the `--shape-align` / `-a` option. It had no effect since the «css»
+  sprite mode was removed from the library.
+* Dropped the `--svg-precision` option. It was parsed and forwarded but never
+  read by the library.
+
+### Fixed
+
+* `docs/command-line.md` now reflects the actual `--help` output: Vento instead
+  of Mustache, `.vto` template defaults, the `--quiet`, `--view-render-css`
+  and `--view-render-*` options, and the current sprite filenames.
+* `--help` shows the template defaults as short paths (`tmpl/…`) instead of the
+  absolute paths they resolve to at runtime.
+
 ## 3.1.0 — Clear skip reporting and resvg status
 
 ### Added
@@ -102,13 +130,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   svgforge library (`svgforge/lib/svg-sprite/utils/index.js`), removing
   the last lodash dependency
 
-### Changed: depend on svgforge 1.1.0 and fix the GitHub release step
+### Changed: depend on svgforge 1.1.0
 
 * Bump the `svgforge` dependency to `^1.1.0` (view-mode `.dims` stylesheet,
   example-document overhaul and invalid-XML fix)
-* Add `GH_TOKEN` to the release workflow so `gh release create` can publish
-  the GitHub release (it previously failed for svgforge with
-  "select a GitHub user or use GH_TOKEN")
 
 ### Changed: re-add the `view` mode dimension stylesheet
 
@@ -128,7 +153,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   page instead of the online configurator
 * Mark the `defs` sprite mode as legacy in the modes table
 
-## 1.0.1 — Drop remaining lodash/async dependencies
+## 1.0.1 — Depend on svgforge 1.0.1
 
 * Bump the `svgforge` dependency to `^1.0.1` (native promise-based helpers,
   `deepMerge` and `escapeHtml` utilities, no `async`/`lodash` dependencies)
@@ -150,16 +175,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Refactor: ES6 classes, JSDoc and xo-default linting
 
 * Convert the CLI to modern ES6 with JSDoc type annotations
-* Strip all `off` rules from `xo.config.js`; fixed lint findings in code with
-  justified line/file-level disables (`xo .` → 0 errors, 0 warnings)
 * Add `u` flags to all regex literals (`require-unicode-regexp`)
 * Rename the binary and package from `svg-sprite-cli`/`svg-sprite` to
   `svgforge-cli`/`svgforge`, including all user-facing config descriptions
 * Bump engines to Node >= 22 and modernize package metadata
-* Resolve the local `svgforge` workspace dependency via a gitignored
-  `pnpm-workspace.yaml` override (`svgforge: link:../svgforge`) so the
-  committed `package.json` stays publication-safe (`svgforge: 1.0.0`)
-* Add `/pnpm-workspace.yaml` to `.gitignore` and regenerate the lockfile
 * Replace the `glob` package with the native `fs.globSync` API and drop `glob`
   from the dependencies; `engines.node` stays `>= 22` (required for the glob
   API introduced in Node 22)

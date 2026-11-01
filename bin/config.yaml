@@ -81,11 +81,6 @@ shape:
     alias: m
     map: shape.meta
 
-  align:
-    description: Path to YAML file with alignment information
-    alias: a
-    map: shape.align
-
   dest:
     description: Path to output directory for intermediate SVG files
     alias: ims
@@ -134,11 +129,6 @@ svg:
   rootattrs:
     description: Custom root attributes for the outermost <svg> element (external JSON file)
     map: svg.rootAttributes
-
-  precision:
-    description: Floating point precision for CSS positioning values
-    default: -1
-    map: svg.precision
 
 view:
   description: Activates the «view» mode
@@ -222,7 +212,7 @@ defs:
 
   sprite:
     description: Sprite path and filename (relative to --defs-dest)
-    default: svg/sprite.css.svg
+    default: svg/sprite.defs.svg
     alias: ds
     map: mode.defs.sprite
 
@@ -298,7 +288,7 @@ symbol:
 
   sprite:
     description: Sprite path and filename (relative to --symbol-dest)
-    default: svg/sprite.css.svg
+    default: svg/sprite.symbol.svg
     alias: ss
     map: mode.symbol.sprite
 
@@ -374,7 +364,7 @@ stack:
 
   sprite:
     description: Sprite path and filename (relative to --stack-dest)
-    default: svg/sprite.css.svg
+    default: svg/sprite.stack.svg
     alias: Ss
     map: mode.stack.sprite
 

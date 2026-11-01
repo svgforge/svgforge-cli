@@ -116,7 +116,7 @@ This results in shape IDs like `path--to--source` (assuming the default shape ID
 
 ## Development
 
-Requirements: Node.js >= 18, [pnpm](https://pnpm.io).
+Requirements: Node.js >= 24, [pnpm](https://pnpm.io).
 
 ```bash
 pnpm install
